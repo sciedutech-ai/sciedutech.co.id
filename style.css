@@ -1,0 +1,50 @@
+/* style.css */
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Modal animation support */
+#authModal.hidden {
+    display: none;
+}
+
+/* Transisi mulus untuk perubahan langkah kerja */
+#step-title, #step-desc, #step-icon {
+    transition: all 0.3s ease-in-out;
+}
+
+/* =========================================
+   SCROLL REVEAL & PARALLAX ANIMATIONS 
+   ========================================= */
+
+/* Efek awal elemen sebelum masuk layar */
+.reveal-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+}
+
+/* Efek saat elemen masuk ke dalam layar */
+.reveal-up.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Efek Parallax khusus untuk background pattern */
+.bg-parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Penundaan (Delay) agar elemen muncul bergantian (Cascade effect) */
+.delay-100 { transition-delay: 100ms; }
+.delay-200 { transition-delay: 200ms; }
+.delay-300 { transition-delay: 300ms; }
+.delay-400 { transition-delay: 400ms; }

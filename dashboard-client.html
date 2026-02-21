@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Dashboard - Sciedutech Digital Solutions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        /* Transisi untuk sidebar mobile */
+        #sidebar { transition: transform 0.3s ease-in-out; }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex overflow-hidden">
+
+    <div id="mobileOverlay" class="fixed inset-0 bg-slate-900/50 z-20 hidden md:hidden backdrop-blur-sm"></div>
+
+    <aside id="sidebar" class="bg-slate-900 text-slate-300 w-64 flex-shrink-0 h-screen flex flex-col fixed md:relative z-30 transform -translate-x-full md:translate-x-0 border-r border-slate-800">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800">
+            <i data-lucide="brain-circuit" class="h-6 w-6 text-cyan-400 mr-2"></i>
+            <span class="font-bold text-lg text-white tracking-tight">sciedutech<span class="text-cyan-400">.id</span></span>
+        </div>
+        
+        <div class="p-4 flex-1 overflow-y-auto">
+            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Menu Utama</p>
+            <nav class="space-y-1">
+                <a href="#" class="flex items-center gap-3 px-3 py-2 bg-cyan-500/10 text-cyan-400 rounded-lg font-medium">
+                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i> Ringkasan
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="folder-kanban" class="h-5 w-5"></i> Proyek Aktif
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="receipt" class="h-5 w-5"></i> Tagihan & Invoice
+                </a>
+                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
+                    <i data-lucide="headphones" class="h-5 w-5"></i> Tiket Dukungan
+                </a>
+            </nav>
+        </div>
+
+        <div class="p-4 border-t border-slate-800">
+            <button id="logoutBtn" class="flex items-center gap-3 px-3 py-2 w-full hover:bg-red-500/10 text-slate-400 hover:text-red-400 rounded-lg transition-colors text-left">
+                <i data-lucide="log-out" class="h-5 w-5"></i> Keluar
+            </button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
+        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10">
+            <div class="flex items-center">
+                <button id="sidebarToggle" class="md:hidden text-slate-500 hover:text-slate-700 mr-4">
+                    <i data-lucide="menu" class="h-6 w-6"></i>
+                </button>
+                <h1 class="text-xl font-bold text-slate-800 hidden sm:block">Dashboard Klien</h1>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button class="text-slate-400 hover:text-cyan-500 transition-colors relative">
+                    <i data-lucide="bell" class="h-5 w-5"></i>
+                    <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full border border-white"></span>
+                </button>
+                <div class="h-8 w-px bg-slate-200"></div>
+                <div class="flex items-center gap-3">
+                    <div class="text-right hidden sm:block">
+                        <p class="text-sm font-bold text-slate-900 leading-none" id="clientNameDisplay">Memuat...</p>
+                        <p class="text-xs text-slate-500">Klien Premium</p>
+                    </div>
+                    <div class="h-9 w-9 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-700 font-bold border border-cyan-200">
+                        <i data-lucide="user" class="h-5 w-5"></i>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
+            
+            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-6 sm:p-8 text-white mb-8 shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-cyan-500/20 blur-3xl"></div>
+                <div class="relative z-10">
+                    <h2 class="text-2xl sm:text-3xl font-bold mb-2">Selamat datang kembali, <span id="welcomeName" class="text-cyan-400">Klien</span>! 👋</h2>
+                    <p class="text-slate-300 max-w-2xl">Pantau perkembangan proyek digital Anda secara real-time. Tim kami sedang bekerja keras mengimplementasikan fitur-fitur yang telah disepakati.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
+                        <i data-lucide="folder-code" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Proyek Aktif</p>
+                        <p class="text-2xl font-bold text-slate-900">2</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+                        <i data-lucide="check-circle" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Proyek Selesai</p>
+                        <p class="text-2xl font-bold text-slate-900">1</p>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
+                    <div class="h-12 w-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
+                        <i data-lucide="receipt" class="h-6 w-6"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Tagihan Tertunda</p>
+                        <p class="text-2xl font-bold text-slate-900">Rp 1.500k</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-lg font-bold text-slate-900 mb-4">Status Proyek Sedang Berjalan</h3>
+                
+                <div class="grid lg:grid-cols-2 gap-6">
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-2.5 py-1 rounded-md bg-cyan-50 text-cyan-700 text-xs font-semibold mb-2 border border-cyan-100">Web App & POS</span>
+                                <h4 class="text-xl font-bold text-slate-900">Sistem Pemesanan Waroeng Andya</h4>
+                                <p class="text-sm text-slate-500 mt-1">Integrasi Digital Menu & Automated Payment</p>
+                            </div>
+                            <button class="text-slate-400 hover:text-cyan-500"><i data-lucide="external-link" class="h-5 w-5"></i></button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <div class="flex justify-between text-sm font-medium mb-2">
+                                <span class="text-slate-700">Tahap Pengkodean (Backend & Integrasi Midtrans)</span>
+                                <span class="text-cyan-600">65%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2 text-slate-500">
+                                <i data-lucide="calendar" class="h-4 w-4"></i> Estimasi selesai: 15 Mar 2026
+                            </div>
+                            <div class="flex gap-1">
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Node.js</span>
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">React</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <span class="inline-block px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold mb-2 border border-indigo-100">AI Integration</span>
+                                <h4 class="text-xl font-bold text-slate-900">Pengembangan Siduu AI Agent</h4>
+                                <p class="text-sm text-slate-500 mt-1">Setup logic dasar & integrasi API</p>
+                            </div>
+                            <button class="text-slate-400 hover:text-indigo-500"><i data-lucide="external-link" class="h-5 w-5"></i></button>
+                        </div>
+                        
+                        <div class="mt-6">
+                            <div class="flex justify-between text-sm font-medium mb-2">
+                                <span class="text-slate-700">Desain Arsitektur & Dataset</span>
+                                <span class="text-indigo-600">30%</span>
+                            </div>
+                            <div class="w-full bg-slate-100 rounded-full h-2.5">
+                                <div class="bg-gradient-to-r from-indigo-400 to-purple-500 h-2.5 rounded-full" style="width: 30%"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
+                            <div class="flex items-center gap-2 text-slate-500">
+                                <i data-lucide="calendar" class="h-4 w-4"></i> Estimasi selesai: 02 Apr 2026
+                            </div>
+                            <div class="flex gap-1">
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">LLM</span>
+                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">JSON</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-6">
+                <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-900">Tagihan Terbaru</h3>
+                        <a href="#" class="text-sm text-cyan-600 font-medium hover:text-cyan-500">Lihat Semua</a>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-100">
+                                <tr>
+                                    <th class="px-6 py-3">No. Invoice</th>
+                                    <th class="px-6 py-3">Deskripsi</th>
+                                    <th class="px-6 py-3">Jumlah</th>
+                                    <th class="px-6 py-3">Status</th>
+                                    <th class="px-6 py-3">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-042</td>
+                                    <td class="px-6 py-4 font-medium text-slate-900">Termin 2 - Waroeng Andya</td>
+                                    <td class="px-6 py-4">Rp 1.500.000</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-md text-xs font-semibold">Menunggu Pembayaran</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-cyan-600 hover:text-cyan-800 font-medium">Bayar</button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-038</td>
+                                    <td class="px-6 py-4 font-medium text-slate-900">DP - Integrasi AI</td>
+                                    <td class="px-6 py-4">Rp 2.000.000</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-semibold">Lunas</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-slate-400 hover:text-slate-600"><i data-lucide="download" class="h-4 w-4"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50 transition-colors">
+                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-015</td>
+                                    <td class="px-6 py-4 font-medium text-slate-900">Company Profile FROZEN JOSJIS</td>
+                                    <td class="px-6 py-4">Rp 1.250.000</td>
+                                    <td class="px-6 py-4">
+                                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-semibold">Lunas</span>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <button class="text-slate-400 hover:text-slate-600"><i data-lucide="download" class="h-4 w-4"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 rounded-xl p-6 text-white shadow-sm flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -right-6 -bottom-6 text-slate-800 transform scale-150">
+                        <i data-lucide="life-buoy" class="h-32 w-32"></i>
+                    </div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 border border-cyan-500/30">
+                            <i data-lucide="message-square" class="h-6 w-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold mb-2">Butuh Bantuan Teknis?</h3>
+                        <p class="text-slate-400 text-sm mb-6">Tim developer kami siap membantu merevisi fitur atau menjawab pertanyaan terkait operasional sistem Anda.</p>
+                    </div>
+                    <button class="relative z-10 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        Buka Tiket Baru <i data-lucide="arrow-right" class="h-4 w-4"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-slate-200 text-center text-sm text-slate-500">
+                &copy; 2026 Sciedutech Digital Solutions. Client Portal.
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Inisialisasi Icons
+        lucide.createIcons();
+
+        // --- Logika Sidebar Mobile ---
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('-translate-x-full');
+            mobileOverlay.classList.toggle('hidden');
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        mobileOverlay.addEventListener('click', toggleSidebar);
+
+        // --- Simulasi Session Auth ---
+        // Di dunia nyata, ini diambil dari API atau state management (misal JWT di localStorage)
+        // Karena ini demo berkelanjutan dari index.html sebelumnya, kita ambil dari localStorage 'sciedutechActiveUser'
+        
+        // *Untuk keperluan demo jika langsung dibuka tanpa lewat halaman index, kita siapkan default user*
+        const defaultUser = { name: "Bpk/Ibu Klien", email: "client@example.com" };
+        
+        let currentUser = null;
+        try {
+            // Coba ambil dari localStorage (asumsi kita set item ini saat login di index.html)
+            const storedUser = localStorage.getItem('sciedutechActiveUser');
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+            } else {
+                // Jika tidak ada simulasi login, gunakan default (Bisa diganti dengan window.location.href = 'index.html')
+                currentUser = defaultUser; 
+            }
+        } catch(e) {
+            currentUser = defaultUser;
+        }
+
+        // Tampilkan Nama User di UI
+        document.getElementById('clientNameDisplay').textContent = currentUser.name;
+        
+        // Mengambil nama depan saja untuk banner "Selamat datang"
+        const firstName = currentUser.name.split(' ')[0];
+        document.getElementById('welcomeName').textContent = firstName;
+
+        // --- Logika Logout ---
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', () => {
+            if(confirm("Apakah Anda yakin ingin keluar dari dashboard?")) {
+                // Hapus session
+                localStorage.removeItem('sciedutechActiveUser');
+                // Alihkan kembali ke landing page
+                window.location.href = 'index.html'; 
+            }
+        });
+    </script>
+</body>
+</html>
