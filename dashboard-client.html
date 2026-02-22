@@ -3,320 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Client Dashboard - Sciedutech Digital Solutions</title>
+    <title>Client Dashboard - Sciedutech.id</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Transisi untuk sidebar mobile */
-        #sidebar { transition: transform 0.3s ease-in-out; }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+        }
+        .progress-glow { box-shadow: 0 0 15px rgba(217, 70, 239, 0.4); }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-active { animation: fadeIn 0.4s ease-out forwards; display: block; }
+        .tab-hidden { display: none; }
+        
+        /* Gaya Khusus untuk PDF agar rapi saat dicetak */
+        #invoice-template, #mou-template {
+            font-family: Arial, sans-serif;
+            background-color: white;
+            color: black;
+            padding: 40px;
+            width: 800px; /* Lebar standar kertas A4 secara proporsional */
+            position: absolute;
+            left: -9999px; /* Sembunyikan dari layar, tapi tetap ada di DOM untuk dicetak */
+        }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex overflow-hidden">
+<body class="bg-slate-950 text-slate-200 min-h-screen font-sans flex overflow-hidden relative">
 
-    <div id="mobileOverlay" class="fixed inset-0 bg-slate-900/50 z-20 hidden md:hidden backdrop-blur-sm"></div>
+    <aside class="w-20 lg:w-64 bg-slate-900 border-r border-slate-800 flex flex-col transition-all z-20">
+        <div class="p-6 flex items-center gap-3">
+            <img src="assets/images/logo-sciedutech.gif" alt="Logo" class="h-8 w-8">
+            <span class="font-bold text-lg text-white hidden lg:block">sciedutech<span class="text-fuchsia-400">.id</span></span>
+        </div>
 
-    <aside id="sidebar" class="bg-slate-900 text-slate-300 w-64 flex-shrink-0 h-screen flex flex-col fixed md:relative z-30 transform -translate-x-full md:translate-x-0 border-r border-slate-800">
-        <div class="h-16 flex items-center px-6 border-b border-slate-800">
-            <i data-lucide="brain-circuit" class="h-6 w-6 text-cyan-400 mr-2"></i>
-            <span class="font-bold text-lg text-white tracking-tight">sciedutech<span class="text-cyan-400">.id</span></span>
-        </div>
-        
-        <div class="p-4 flex-1 overflow-y-auto">
-            <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-4 px-2">Menu Utama</p>
-            <nav class="space-y-1">
-                <a href="#" class="flex items-center gap-3 px-3 py-2 bg-cyan-500/10 text-cyan-400 rounded-lg font-medium">
-                    <i data-lucide="layout-dashboard" class="h-5 w-5"></i> Ringkasan
-                </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
-                    <i data-lucide="folder-kanban" class="h-5 w-5"></i> Proyek Aktif
-                </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
-                    <i data-lucide="receipt" class="h-5 w-5"></i> Tagihan & Invoice
-                </a>
-                <a href="#" class="flex items-center gap-3 px-3 py-2 hover:bg-slate-800 hover:text-white rounded-lg transition-colors">
-                    <i data-lucide="headphones" class="h-5 w-5"></i> Tiket Dukungan
-                </a>
-            </nav>
-        </div>
+        <nav class="flex-1 px-4 py-6 space-y-2" id="sidebar-nav">
+            <button data-target="tab-ringkasan" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 transition-all group">
+                <i data-lucide="layout-grid" class="h-5 w-5 shrink-0"></i>
+                <span class="font-bold hidden lg:block text-left w-full uppercase text-sm tracking-wider">Ringkasan</span>
+            </button>
+            <button data-target="tab-progres" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all group">
+                <i data-lucide="trello" class="h-5 w-5 shrink-0 group-hover:text-white"></i>
+                <span class="font-medium hidden lg:block text-left w-full text-sm">Progres Proyek</span>
+            </button>
+            <button data-target="tab-dokumen" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all group">
+                <i data-lucide="file-text" class="h-5 w-5 shrink-0 group-hover:text-white"></i>
+                <span class="font-medium hidden lg:block text-left w-full text-sm">Invoice & MoU</span>
+            </button>
+            <button data-target="tab-support" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all group">
+                <i data-lucide="life-buoy" class="h-5 w-5 shrink-0 group-hover:text-white"></i>
+                <span class="font-medium hidden lg:block text-left w-full text-sm">Support Tiket</span>
+            </button>
+        </nav>
 
         <div class="p-4 border-t border-slate-800">
-            <button id="logoutBtn" class="flex items-center gap-3 px-3 py-2 w-full hover:bg-red-500/10 text-slate-400 hover:text-red-400 rounded-lg transition-colors text-left">
-                <i data-lucide="log-out" class="h-5 w-5"></i> Keluar
+            <button id="logoutBtn" class="w-full flex items-center gap-4 p-3 rounded-xl text-red-400 hover:bg-red-500/10 transition-all group">
+                <i data-lucide="log-out" class="h-5 w-5 shrink-0"></i>
+                <span class="font-bold hidden lg:block text-left w-full text-sm">Logout</span>
             </button>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-hidden bg-slate-50">
-        <header class="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-10">
-            <div class="flex items-center">
-                <button id="sidebarToggle" class="md:hidden text-slate-500 hover:text-slate-700 mr-4">
-                    <i data-lucide="menu" class="h-6 w-6"></i>
-                </button>
-                <h1 class="text-xl font-bold text-slate-800 hidden sm:block">Dashboard Klien</h1>
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] relative">
+        
+        <header class="p-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 sticky top-0 bg-slate-950/80 backdrop-blur-md z-10 border-b border-slate-800/50">
+            <div>
+                <h1 class="text-3xl font-black text-white tracking-tight">Terminal Klien: <span id="client-name" class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Memuat...</span></h1>
+                <p class="text-slate-400 font-mono text-sm mt-1 uppercase tracking-widest">[ Status: <span class="text-emerald-400 animate-pulse">Connected</span> ]</p>
             </div>
-            
-            <div class="flex items-center gap-4">
-                <button class="text-slate-400 hover:text-cyan-500 transition-colors relative">
-                    <i data-lucide="bell" class="h-5 w-5"></i>
-                    <span class="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full border border-white"></span>
-                </button>
-                <div class="h-8 w-px bg-slate-200"></div>
-                <div class="flex items-center gap-3">
-                    <div class="text-right hidden sm:block">
-                        <p class="text-sm font-bold text-slate-900 leading-none" id="clientNameDisplay">Memuat...</p>
-                        <p class="text-xs text-slate-500">Klien Premium</p>
-                    </div>
-                    <div class="h-9 w-9 rounded-full bg-cyan-100 flex items-center justify-center text-cyan-700 font-bold border border-cyan-200">
-                        <i data-lucide="user" class="h-5 w-5"></i>
-                    </div>
+            <div class="flex items-center gap-4 bg-slate-900/80 p-2 rounded-2xl border border-slate-700 shadow-inner">
+                <div class="text-right pr-3 border-r border-slate-700 hidden sm:block">
+                    <p class="text-xs font-bold text-white uppercase tracking-tighter" id="project-id">Memuat ID...</p>
+                    <p class="text-[10px] text-fuchsia-400 font-mono">Real-Time Sync</p>
+                </div>
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-fuchsia-600 flex items-center justify-center font-bold text-white shadow-lg">
+                    <i data-lucide="fingerprint"></i>
                 </div>
             </div>
         </header>
 
-        <div class="flex-1 overflow-auto p-4 sm:p-6 lg:p-8">
-            
-            <div class="bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-6 sm:p-8 text-white mb-8 shadow-lg relative overflow-hidden">
-                <div class="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-cyan-500/20 blur-3xl"></div>
-                <div class="relative z-10">
-                    <h2 class="text-2xl sm:text-3xl font-bold mb-2">Selamat datang kembali, <span id="welcomeName" class="text-cyan-400">Klien</span>! 👋</h2>
-                    <p class="text-slate-300 max-w-2xl">Pantau perkembangan proyek digital Anda secara real-time. Tim kami sedang bekerja keras mengimplementasikan fitur-fitur yang telah disepakati.</p>
+        <div id="tab-ringkasan" class="tab-pane tab-active pb-8">
+            <div class="px-8 grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 mt-6">
+                <div class="glass-card p-6 rounded-[2rem] shadow-xl relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:scale-110 transition-transform"><i data-lucide="activity" class="h-16 w-16"></i></div>
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Progres Keseluruhan</p>
+                    <h3 class="text-4xl font-black text-white mb-4" id="main-progress-text">0<span class="text-fuchsia-500">%</span></h3>
+                    <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+                        <div class="h-full bg-fuchsia-500 progress-glow transition-all duration-1000" id="main-progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="glass-card p-6 rounded-[2rem] shadow-xl">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Estimasi Rilis</p>
+                    <h3 class="text-2xl font-bold text-white mb-1" id="main-estimate">Memuat...</h3>
+                    <p class="text-emerald-400 text-xs font-mono flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i> Tepat Waktu (On Schedule)</p>
+                </div>
+                <div class="glass-card p-6 rounded-[2rem] shadow-xl">
+                    <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Status Pembayaran</p>
+                    <h3 class="text-2xl font-bold text-white mb-1" id="main-payment">Memuat...</h3>
+                    <p class="text-blue-400 text-xs font-mono flex items-center gap-1"><i data-lucide="shield-check" class="h-3 w-3"></i> Terverifikasi Sistem</p>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
-                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center shrink-0">
-                        <i data-lucide="folder-code" class="h-6 w-6"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Proyek Aktif</p>
-                        <p class="text-2xl font-bold text-slate-900">2</p>
-                    </div>
-                </div>
-                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
-                        <i data-lucide="check-circle" class="h-6 w-6"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Proyek Selesai</p>
-                        <p class="text-2xl font-bold text-slate-900">1</p>
+            <div class="px-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 glass-card rounded-[2.5rem] p-8">
+                    <h3 class="text-xl font-bold text-white mb-8 flex items-center gap-3">
+                        <i data-lucide="list-checks" class="text-fuchsia-500"></i> Milestone Pengerjaan
+                    </h3>
+                    <div class="space-y-8 relative" id="ringkasan-milestones">
+                        <div class="absolute left-[17px] top-2 bottom-2 w-0.5 bg-slate-800"></div>
+                        <p class="text-slate-500 font-mono text-sm pl-10">Menghubungkan ke Firebase Data...</p>
                     </div>
                 </div>
-                <div class="bg-white rounded-xl p-6 border border-slate-100 shadow-sm flex items-center gap-4">
-                    <div class="h-12 w-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center shrink-0">
-                        <i data-lucide="receipt" class="h-6 w-6"></i>
-                    </div>
-                    <div>
-                        <p class="text-sm font-medium text-slate-500">Tagihan Tertunda</p>
-                        <p class="text-2xl font-bold text-slate-900">Rp 1.500k</p>
+
+                <div class="space-y-6">
+                    <div class="bg-gradient-to-br from-blue-600 to-indigo-700 p-8 rounded-[2.5rem] shadow-xl relative overflow-hidden">
+                        <div class="relative z-10">
+                            <h4 class="font-bold text-white text-xl mb-2">Punya Kendala?</h4>
+                            <p class="text-blue-100 text-sm mb-6 opacity-80">Gunakan fitur Support Tiket atau hubungi Admin secara langsung.</p>
+                            <button onclick="document.querySelector('[data-target=\'tab-support\']').click()" class="block w-full bg-white text-blue-700 font-bold py-3 rounded-xl text-center shadow-lg hover:bg-slate-100 transition-all">
+                                Buka Support Tiket
+                            </button>
+                        </div>
+                        <i data-lucide="headphones" class="absolute -right-6 -bottom-6 h-32 w-32 text-white/10"></i>
                     </div>
                 </div>
             </div>
-
-            <div class="mb-8">
-                <h3 class="text-lg font-bold text-slate-900 mb-4">Status Proyek Sedang Berjalan</h3>
-                
-                <div class="grid lg:grid-cols-2 gap-6">
-                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <span class="inline-block px-2.5 py-1 rounded-md bg-cyan-50 text-cyan-700 text-xs font-semibold mb-2 border border-cyan-100">Web App & POS</span>
-                                <h4 class="text-xl font-bold text-slate-900">Sistem Pemesanan Waroeng Andya</h4>
-                                <p class="text-sm text-slate-500 mt-1">Integrasi Digital Menu & Automated Payment</p>
-                            </div>
-                            <button class="text-slate-400 hover:text-cyan-500"><i data-lucide="external-link" class="h-5 w-5"></i></button>
-                        </div>
-                        
-                        <div class="mt-6">
-                            <div class="flex justify-between text-sm font-medium mb-2">
-                                <span class="text-slate-700">Tahap Pengkodean (Backend & Integrasi Midtrans)</span>
-                                <span class="text-cyan-600">65%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                <div class="bg-gradient-to-r from-cyan-400 to-blue-500 h-2.5 rounded-full" style="width: 65%"></div>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
-                            <div class="flex items-center gap-2 text-slate-500">
-                                <i data-lucide="calendar" class="h-4 w-4"></i> Estimasi selesai: 15 Mar 2026
-                            </div>
-                            <div class="flex gap-1">
-                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">Node.js</span>
-                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">React</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                        <div class="flex justify-between items-start mb-4">
-                            <div>
-                                <span class="inline-block px-2.5 py-1 rounded-md bg-indigo-50 text-indigo-700 text-xs font-semibold mb-2 border border-indigo-100">AI Integration</span>
-                                <h4 class="text-xl font-bold text-slate-900">Pengembangan Siduu AI Agent</h4>
-                                <p class="text-sm text-slate-500 mt-1">Setup logic dasar & integrasi API</p>
-                            </div>
-                            <button class="text-slate-400 hover:text-indigo-500"><i data-lucide="external-link" class="h-5 w-5"></i></button>
-                        </div>
-                        
-                        <div class="mt-6">
-                            <div class="flex justify-between text-sm font-medium mb-2">
-                                <span class="text-slate-700">Desain Arsitektur & Dataset</span>
-                                <span class="text-indigo-600">30%</span>
-                            </div>
-                            <div class="w-full bg-slate-100 rounded-full h-2.5">
-                                <div class="bg-gradient-to-r from-indigo-400 to-purple-500 h-2.5 rounded-full" style="width: 30%"></div>
-                            </div>
-                        </div>
-
-                        <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-sm">
-                            <div class="flex items-center gap-2 text-slate-500">
-                                <i data-lucide="calendar" class="h-4 w-4"></i> Estimasi selesai: 02 Apr 2026
-                            </div>
-                            <div class="flex gap-1">
-                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">LLM</span>
-                                <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded text-xs">JSON</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 flex justify-between items-center">
-                        <h3 class="text-lg font-bold text-slate-900">Tagihan Terbaru</h3>
-                        <a href="#" class="text-sm text-cyan-600 font-medium hover:text-cyan-500">Lihat Semua</a>
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-left">
-                            <thead class="bg-slate-50 text-slate-500 font-medium border-b border-slate-100">
-                                <tr>
-                                    <th class="px-6 py-3">No. Invoice</th>
-                                    <th class="px-6 py-3">Deskripsi</th>
-                                    <th class="px-6 py-3">Jumlah</th>
-                                    <th class="px-6 py-3">Status</th>
-                                    <th class="px-6 py-3">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100">
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-042</td>
-                                    <td class="px-6 py-4 font-medium text-slate-900">Termin 2 - Waroeng Andya</td>
-                                    <td class="px-6 py-4">Rp 1.500.000</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 bg-amber-100 text-amber-700 rounded-md text-xs font-semibold">Menunggu Pembayaran</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-cyan-600 hover:text-cyan-800 font-medium">Bayar</button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-038</td>
-                                    <td class="px-6 py-4 font-medium text-slate-900">DP - Integrasi AI</td>
-                                    <td class="px-6 py-4">Rp 2.000.000</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-semibold">Lunas</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-slate-400 hover:text-slate-600"><i data-lucide="download" class="h-4 w-4"></i></button>
-                                    </td>
-                                </tr>
-                                <tr class="hover:bg-slate-50 transition-colors">
-                                    <td class="px-6 py-4 font-mono text-slate-600">INV-2026-015</td>
-                                    <td class="px-6 py-4 font-medium text-slate-900">Company Profile FROZEN JOSJIS</td>
-                                    <td class="px-6 py-4">Rp 1.250.000</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 bg-emerald-100 text-emerald-700 rounded-md text-xs font-semibold">Lunas</span>
-                                    </td>
-                                    <td class="px-6 py-4">
-                                        <button class="text-slate-400 hover:text-slate-600"><i data-lucide="download" class="h-4 w-4"></i></button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="bg-slate-900 rounded-xl p-6 text-white shadow-sm flex flex-col justify-between relative overflow-hidden">
-                    <div class="absolute -right-6 -bottom-6 text-slate-800 transform scale-150">
-                        <i data-lucide="life-buoy" class="h-32 w-32"></i>
-                    </div>
-                    <div class="relative z-10">
-                        <div class="w-12 h-12 rounded-full bg-cyan-500/20 text-cyan-400 flex items-center justify-center mb-4 border border-cyan-500/30">
-                            <i data-lucide="message-square" class="h-6 w-6"></i>
-                        </div>
-                        <h3 class="text-xl font-bold mb-2">Butuh Bantuan Teknis?</h3>
-                        <p class="text-slate-400 text-sm mb-6">Tim developer kami siap membantu merevisi fitur atau menjawab pertanyaan terkait operasional sistem Anda.</p>
-                    </div>
-                    <button class="relative z-10 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold py-3 px-4 rounded-lg transition-colors flex items-center justify-center gap-2">
-                        Buka Tiket Baru <i data-lucide="arrow-right" class="h-4 w-4"></i>
-                    </button>
-                </div>
-            </div>
-
-            <div class="mt-8 pt-6 border-t border-slate-200 text-center text-sm text-slate-500">
-                &copy; 2026 Sciedutech Digital Solutions. Client Portal.
-            </div>
-
         </div>
+
+        <div id="tab-progres" class="tab-pane tab-hidden px-8 py-6">
+            <h2 class="text-2xl font-bold text-white mb-2">Log Pengembangan Sistem</h2>
+            <p class="text-slate-400 mb-8">Pelacakan mendetail dari setiap arsitektur yang kami bangun untuk Anda.</p>
+            
+            <div class="glass-card rounded-[2.5rem] p-8 md:p-12 relative overflow-hidden">
+                <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/blueprint.png')] opacity-5 mix-blend-overlay"></div>
+                <div class="space-y-10 relative z-10" id="detail-milestones">
+                    <p class="text-slate-500 font-mono text-sm">Menghubungkan ke Firebase Data...</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-dokumen" class="tab-pane tab-hidden px-8 py-6">
+            <h2 class="text-2xl font-bold text-white mb-2">Arsip Dokumen Legal</h2>
+            <p class="text-slate-400 mb-8">Unduh dokumen kerja sama, penawaran harga, dan kwitansi resmi yang dibuat secara dinamis.</p>
+
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-3xl flex items-start gap-5 group hover:border-fuchsia-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-2xl bg-fuchsia-500/10 border border-fuchsia-500/20 flex items-center justify-center shrink-0 text-fuchsia-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="file-signature" class="h-7 w-7"></i>
+                    </div>
+                    <div class="flex-1">
+                        <h4 class="font-bold text-white text-lg">MoU & Surat Perjanjian</h4>
+                        <p class="text-xs text-slate-400 font-mono mb-4 mt-1">Dokumen Resmi Kerja Sama</p>
+                        <button id="btn-download-mou" class="inline-flex items-center gap-2 text-sm font-bold text-fuchsia-400 hover:text-fuchsia-300 transition-colors cursor-pointer">
+                            <i data-lucide="download-cloud" class="h-4 w-4"></i> Generate PDF MoU
+                        </button>
+                    </div>
+                </div>
+
+                <div class="glass-card p-6 rounded-3xl flex items-start gap-5 group hover:border-emerald-500/50 transition-colors">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0 text-emerald-400 group-hover:scale-110 transition-transform">
+                        <i data-lucide="receipt" class="h-7 w-7"></i>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-white text-lg">Invoice Pembayaran</h4>
+                            <span id="badge-payment-status" class="px-2 py-1 bg-slate-500/20 text-slate-400 text-[10px] font-bold rounded uppercase tracking-wider">Loading...</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-mono mb-4 mt-1" id="card-inv-no">No. INV/---</p>
+                        <button id="btn-download-inv" class="inline-flex items-center gap-2 text-sm font-bold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer">
+                            <i data-lucide="download-cloud" class="h-4 w-4"></i> Cetak Kwitansi Resmi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-support" class="tab-pane tab-hidden px-8 py-6">
+            <h2 class="text-2xl font-bold text-white mb-2">Pusat Bantuan & Komunikasi</h2>
+            <p class="text-slate-400 mb-8">Kirimkan permintaan revisi, pertanyaan sistem, atau laporan kendala secara langsung.</p>
+
+            <div class="glass-card rounded-[2.5rem] p-8 md:p-12 max-w-3xl">
+                <form id="supportForm" class="space-y-6">
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-widest mb-2">Jenis Kendala / Request</label>
+                        <select id="supportType" class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:ring-2 focus:ring-fuchsia-500 outline-none appearance-none">
+                            <option value="Revisi Desain UI">Revisi Desain UI</option>
+                            <option value="Tambahan Fitur Sistem">Tambahan Fitur Sistem</option>
+                            <option value="Tanya Seputar Dokumen">Tanya Seputar Dokumen / Pembayaran</option>
+                            <option value="Laporan Bug / Error">Laporan Bug / Error Sistem</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-widest mb-2">Pesan Detail</label>
+                        <textarea id="supportMessage" rows="5" required class="w-full bg-slate-900 border border-slate-700 text-white rounded-xl py-3 px-4 focus:ring-2 focus:ring-fuchsia-500 outline-none resize-none placeholder:text-slate-600" placeholder="Jelaskan secara detail apa yang ingin didiskusikan..."></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full sm:w-auto bg-fuchsia-600 hover:bg-fuchsia-500 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_20px_rgba(217,70,239,0.3)] hover:-translate-y-1 flex items-center justify-center gap-2">
+                        Kirim Tiket ke WhatsApp Admin <i data-lucide="send" class="h-4 w-4"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+
     </main>
 
-    <script>
-        // Inisialisasi Icons
-        lucide.createIcons();
+<div id="invoice-template" style="width: 794px; min-height: 1123px; padding: 50px 60px; background: white; color: black; position: absolute; left: -9999px; font-size: 12px; line-height: 1.4;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; border-bottom: 2px solid #0f172a; padding-bottom: 20px;">
+        <div>
+            <h2 style="margin: 0; color: #d946ef; font-size: 24px; font-weight: 800;">Sciedutech.id</h2>
+            <p style="margin: 5px 0 0 0; color: #475569; font-weight: 600;">Web Development & Digital Solutions</p>
+            <p style="margin: 2px 0 0 0; color: #64748b; font-size: 10px;">Sidoarjo, Jawa Timur, Indonesia<br>WhatsApp: +62 857-4817-5548 | sciedugame@gmail.com</p>
+        </div>
+        <div style="text-align: right;">
+            <h1 style="font-size: 36px; font-weight: 900; margin: 0; letter-spacing: -1px; color: #0f172a;">INVOICE</h1>
+            <p style="margin: 5px 0 0 0; font-family: monospace; font-weight: bold; font-size: 14px;" id="pdf-inv-no-text">#INV-2026-001</p>
+        </div>
+    </div>
 
-        // --- Logika Sidebar Mobile ---
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const mobileOverlay = document.getElementById('mobileOverlay');
+    <div style="display: flex; justify-content: space-between; margin-bottom: 40px;">
+        <div style="width: 50%;">
+            <p style="font-size: 10px; font-weight: bold; color: #94a3b8; text-transform: uppercase; margin-bottom: 5px;">Ditujukan Kepada:</p>
+            <h3 style="font-size: 16px; font-weight: bold; margin: 0; color: #1e293b;" id="pdf-inv-client">---</h3>
+            <p style="margin: 3px 0 0 0; color: #64748b;" id="pdf-inv-proj-id">Project ID: ---</p>
+            <p style="margin: 2px 0 0 0; color: #64748b;">Client Partner Sciedutech</p>
+        </div>
+        <div style="width: 40%; text-align: right;">
+            <p style="margin: 0; color: #64748b;"><strong>Tanggal Terbit:</strong> <span class="current-date">---</span></p>
+            <p style="margin: 5px 0 0 0; color: #64748b;"><strong>Tenggat:</strong> <span id="pdf-inv-due">---</span></p>
+            <p style="margin: 5px 0 0 0;"><strong>Status:</strong> <span id="pdf-inv-status-label" style="font-weight: bold; color: #d946ef;">---</span></p>
+        </div>
+    </div>
 
-        function toggleSidebar() {
-            sidebar.classList.toggle('-translate-x-full');
-            mobileOverlay.classList.toggle('hidden');
-        }
+    <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+        <thead>
+            <tr style="background: #0f172a; color: white;">
+                <th style="padding: 12px 15px; text-align: left; font-size: 10px; text-transform: uppercase;">Deskripsi Layanan</th>
+                <th style="padding: 12px 15px; text-align: center; font-size: 10px; text-transform: uppercase; width: 60px;">Satuan</th>
+                <th style="padding: 12px 15px; text-align: right; font-size: 10px; text-transform: uppercase;">Harga Satuan</th>
+                <th style="padding: 12px 15px; text-align: right; font-size: 10px; text-transform: uppercase;">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0;">
+                    <strong style="color: #1e293b;">Web Development & System Integration</strong><br>
+                    <span style="font-size: 10px; color: #64748b;">Pengembangan modul backend, frontend, dan sinkronisasi database.</span>
+                </td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; text-align: center;">1 Unit</td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; text-align: right;" id="pdf-inv-price-unit">Rp 0</td>
+                <td style="padding: 15px; border-bottom: 1px solid #e2e8f0; text-align: right; font-weight: bold;" id="pdf-inv-amount">Rp 0</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px 15px; border-bottom: 1px solid #e2e8f0; font-size: 11px; color: #64748b;">Maintenance & Technical Support</td>
+                <td style="padding: 10px 15px; border-bottom: 1px solid #e2e8f0; text-align: center;">1 Bulan</td>
+                <td style="padding: 10px 15px; border-bottom: 1px solid #e2e8f0; text-align: right;">FREE</td>
+                <td style="padding: 10px 15px; border-bottom: 1px solid #e2e8f0; text-align: right;">Rp 0</td>
+            </tr>
+        </tbody>
+    </table>
 
-        sidebarToggle.addEventListener('click', toggleSidebar);
-        mobileOverlay.addEventListener('click', toggleSidebar);
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 40px;">
+        <div style="width: 250px;">
+            <div style="display: flex; justify-content: space-between; padding: 5px 0; color: #64748b;">
+                <span>Subtotal:</span>
+                <span id="pdf-inv-subtotal">Rp 0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 5px 0; color: #64748b; border-bottom: 1px solid #e2e8f0;">
+                <span>Pajak (PPN 0%):</span>
+                <span>Rp 0</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 10px 0; font-weight: 800; font-size: 16px; color: #0f172a;">
+                <span>TOTAL:</span>
+                <span id="pdf-inv-total">Rp 0</span>
+            </div>
+        </div>
+    </div>
 
-        // --- Simulasi Session Auth ---
-        // Di dunia nyata, ini diambil dari API atau state management (misal JWT di localStorage)
-        // Karena ini demo berkelanjutan dari index.html sebelumnya, kita ambil dari localStorage 'sciedutechActiveUser'
+    <div style="display: flex; justify-content: space-between; gap: 40px;">
+        <div style="flex: 1; background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0;">
+            <h4 style="margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: #1e293b;">Informasi Pembayaran</h4>
+            <p style="margin: 0; font-size: 11px; color: #475569;">
+                <strong>Bank:</strong> BCA (Bank Central Asia)<br>
+                <strong>No. Rekening:</strong> 0182226383<br>
+                <strong>Atas Nama:</strong> M. Rizky Ashdaqofillah<br>
+                <em style="font-size: 10px; color: #94a3b8;">Berita: [No Invoice] - [Nama Klien]</em>
+            </p>
+        </div>
+        <div style="flex: 1;">
+            <h4 style="margin: 0 0 10px 0; font-size: 11px; text-transform: uppercase; color: #1e293b;">Syarat & Ketentuan</h4>
+            <ul style="margin: 0; padding: 0 0 0 15px; font-size: 10px; color: #64748b;">
+                <li>Kredensial sistem diserahkan setelah pelunasan 100%.</li>
+                <li>Garansi bug sistem berlaku selama 30 hari kalender.</li>
+                <li>Perubahan scope kerja akan diatur dalam Addendum.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 60px; display: flex; justify-content: space-between; align-items: flex-end;">
+        <div style="color: #94a3b8; font-size: 10px; max-width: 300px;">
+            Terima kasih atas kepercayaan Anda bekerja sama dengan <strong>Sciedutech.id</strong>!
+        </div>
+        <div style="text-align: center; width: 200px;">
+            <p style="font-size: 11px; margin-bottom: 40px;">Lead Developer,</p>
+            <div style="position: relative; height: 60px;">
+                <img src="assets/images/ttd.png" style="height: 70px; position: absolute; left: 50%; transform: translateX(-50%); top: -30px; z-index: 10;">
+            </div>
+            <p style="font-weight: bold; border-top: 1px solid black; padding-top: 5px; margin: 0; font-size: 13px;">M. Rizky Ashdaqofillah</p>
+            <p style="font-size: 10px; color: #64748b; margin: 0;">Founder Sciedutech</p>
+        </div>
+    </div>
+</div>
+    <div id="mou-template" style="width: 794px; min-height: 1123px; padding: 80px; background: white; color: black; position: absolute; left: -9999px; text-align: justify; line-height: 1.6;">
+        <div style="text-align: center; border-bottom: 2px solid #000; padding-bottom: 20px; margin-bottom: 40px;">
+            <h1 style="margin: 0; font-size: 22px; text-transform: uppercase; letter-spacing: 1px;">Memorandum of Understanding (MoU)</h1>
+            <p style="margin: 5px 0 0 0; font-family: monospace;" id="pdf-mou-ref">No: ---/MOU/SC/2026</p>
+        </div>
+
+        <p style="font-size: 14px;">Pada hari ini, tanggal <strong><span class="current-date"></span></strong>, telah disepakati perjanjian kerja sama antara:</p>
+        <div style="margin-left: 20px; font-size: 14px;">
+            <p><strong>PIHAK PERTAMA:</strong> M. Rizky Ashdaqofillah (Founder Sciedutech.id)</p>
+            <p><strong>PIHAK KEDUA:</strong> <span id="pdf-mou-client-top" style="font-weight: bold; text-decoration: underline;">---</span></p>
+        </div>
+
+        <p style="font-size: 14px; margin-top: 30px;">Kedua belah pihak sepakat untuk melakukan pengembangan sistem digital dengan ketentuan:</p>
         
-        // *Untuk keperluan demo jika langsung dibuka tanpa lewat halaman index, kita siapkan default user*
-        const defaultUser = { name: "Bpk/Ibu Klien", email: "client@example.com" };
+        <div style="font-size: 13px;">
+            <p><strong>PASAL 1:</strong> Pihak Pertama melaksanakan pengembangan sistem sesuai ID Proyek <strong id="pdf-mou-project-id">---</strong>.</p>
+            <p><strong>PASAL 2:</strong> Pembayaran dilakukan sesuai nilai yang tertera pada Invoice resmi Sciedutech.id.</p>
+            <p><strong>PASAL 3:</strong> Hak kekayaan intelektual sistem beralih kepada Pihak Kedua setelah pelunasan dilakukan.</p>
+            <p><strong>PASAL 4:</strong> Seluruh data klien bersifat rahasia dan tidak akan disebarluaskan kepada pihak ketiga.</p>
+        </div>
+
+        <div style="margin-top: 100px; display: flex; justify-content: space-between; text-align: center;">
+            <div style="width: 250px;">
+                <p style="font-size: 14px; margin-bottom: 10px;">PIHAK PERTAMA,</p>
+                <div style="height: 80px; position: relative;">
+                    <img src="assets/images/ttd.png" alt="TTD" style="height: 70px; margin: 0 auto; position: relative; z-index: 2;">
+                </div>
+                <p style="font-weight: bold; border-top: 1px solid #000; margin: 0;">M. Rizky Ashdaqofillah</p>
+            </div>
+            <div style="width: 250px;">
+                <p style="font-size: 14px; margin-bottom: 90px;">PIHAK KEDUA,</p>
+                <p style="font-weight: bold; border-top: 1px solid #000; margin: 0;" id="pdf-mou-client-sign">---</p>
+            </div>
+        </div>
+    </div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    // FIREBASE CONFIG ASLI ANDA
+    const firebaseConfig = {
+        apiKey: "AIzaSyA7_DlF7cuWjT6T3dIfQq0BCLeuKIcyFrQ",
+        authDomain: "sciedutech-platform.firebaseapp.com",
+        databaseURL: "https://sciedutech-platform-default-rtdb.firebaseio.com",
+        projectId: "sciedutech-platform",
+        storageBucket: "sciedutech-platform.firebasestorage.app",
+        messagingSenderId: "548051165082",
+        appId: "1:548051165082:web:281d741d46277ff4432423"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    // VARIABEL GLOBAL SEMENTARA
+    window.currentProjectData = null;
+    window.currentProjectId = null;
+
+    const activeClient = JSON.parse(localStorage.getItem('sciedutechActiveClient'));
+
+    if (!activeClient) {
+        window.location.href = 'login.html';
+    } else {
+        const projectId = activeClient.id; 
+        window.currentProjectId = projectId;
         
-        let currentUser = null;
-        try {
-            // Coba ambil dari localStorage (asumsi kita set item ini saat login di index.html)
-            const storedUser = localStorage.getItem('sciedutechActiveUser');
-            if (storedUser) {
-                currentUser = JSON.parse(storedUser);
+        document.getElementById('client-name').textContent = activeClient.name;
+        document.getElementById('project-id').textContent = `ID: ${projectId}`;
+
+        const projectRef = ref(db, `projects/${projectId}`);
+        onValue(projectRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                window.currentProjectData = data; 
+                updateDashboardUI(data);
+                // Langsung siapkan teks di dalam template agar tidak kosong saat diunduh
+                injectDataToTemplates(data, projectId);
             } else {
-                // Jika tidak ada simulasi login, gunakan default (Bisa diganti dengan window.location.href = 'index.html')
-                currentUser = defaultUser; 
-            }
-        } catch(e) {
-            currentUser = defaultUser;
-        }
-
-        // Tampilkan Nama User di UI
-        document.getElementById('clientNameDisplay').textContent = currentUser.name;
-        
-        // Mengambil nama depan saja untuk banner "Selamat datang"
-        const firstName = currentUser.name.split(' ')[0];
-        document.getElementById('welcomeName').textContent = firstName;
-
-        // --- Logika Logout ---
-        const logoutBtn = document.getElementById('logoutBtn');
-        logoutBtn.addEventListener('click', () => {
-            if(confirm("Apakah Anda yakin ingin keluar dari dashboard?")) {
-                // Hapus session
-                localStorage.removeItem('sciedutechActiveUser');
-                // Alihkan kembali ke landing page
-                window.location.href = 'index.html'; 
+                document.getElementById('ringkasan-milestones').innerHTML = "<p class='text-red-400 pl-4'>Data proyek sedang disiapkan...</p>";
             }
         });
-    </script>
+    }
+
+    // FUNGSI INJEKSI DATA KE TEMPLATE PDF
+    function injectDataToTemplates(data, projectId) {
+        const today = new Date().toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+        
+        // Data Invoice
+        const invNo = document.getElementById('pdf-inv-no') || document.getElementById('pdf-inv-no-text');
+        if(invNo) invNo.textContent = `No: ${data.invoice?.no || '---'}`;
+        if(document.getElementById('pdf-inv-client')) document.getElementById('pdf-inv-client').textContent = data.clientName;
+        if(document.getElementById('pdf-inv-amount')) {
+            const amount = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(data.invoice?.amount || 0);
+            document.getElementById('pdf-inv-amount').textContent = amount;
+        }
+        if(document.getElementById('pdf-inv-status')) document.getElementById('pdf-inv-status').textContent = (data.paymentStatus || "PENDING").toUpperCase();
+
+        // Data MoU
+        if(document.getElementById('pdf-mou-ref')) document.getElementById('pdf-mou-ref').textContent = `Ref: ${projectId}/MOU/SC/2026`;
+        if(document.getElementById('pdf-mou-client-top')) document.getElementById('pdf-mou-client-top').textContent = data.clientName;
+        if(document.getElementById('pdf-mou-client-sign')) document.getElementById('pdf-mou-client-sign').textContent = data.clientName;
+        if(document.getElementById('pdf-mou-project-id')) document.getElementById('pdf-mou-project-id').textContent = projectId;
+        document.querySelectorAll('.current-date').forEach(el => el.textContent = today);
+    }
+
+    function updateDashboardUI(data) {
+        // Stats
+        const progressBar = document.getElementById('main-progress-bar');
+        if(progressBar) progressBar.style.width = data.progress + '%';
+        document.getElementById('main-progress-text').innerHTML = `${data.progress}<span class="text-fuchsia-500">%</span>`;
+        document.getElementById('main-estimate').textContent = data.estimateDate || "-";
+        document.getElementById('main-payment').textContent = data.paymentStatus || "-";
+
+        if(data.invoice?.no) document.getElementById('card-inv-no').textContent = `No. ${data.invoice.no}`;
+        
+        // Badge Status
+        const badge = document.getElementById('badge-payment-status');
+        if(badge) {
+            const ps = (data.paymentStatus || "").toLowerCase();
+            badge.textContent = ps.includes('lunas') ? "Lunas" : "Pending";
+            badge.className = ps.includes('lunas') ? "px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded uppercase" : "px-2 py-1 bg-amber-500/20 text-amber-400 text-[10px] font-bold rounded uppercase";
+        }
+
+        // Milestones
+        const rContainer = document.getElementById('ringkasan-milestones');
+        const dContainer = document.getElementById('detail-milestones');
+        if (data.milestones) {
+            rContainer.innerHTML = '<div class="absolute left-[17px] top-2 bottom-2 w-0.5 bg-slate-800"></div>';
+            dContainer.innerHTML = '<div class="absolute left-[27px] top-4 bottom-4 w-1 bg-slate-800 rounded-full"></div>';
+
+            const mArray = Array.isArray(data.milestones) ? data.milestones : Object.values(data.milestones);
+            mArray.forEach(m => {
+                let icon = "clock", color = "bg-slate-800";
+                if(m.status === "selesai") { icon="check"; color="bg-emerald-500"; }
+                else if(m.status === "proses") { icon="code"; color="bg-blue-500 animate-pulse"; }
+
+                rContainer.innerHTML += `<div class="flex gap-6 relative"><div class="w-9 h-9 rounded-full ${color} flex items-center justify-center shrink-0 z-10"><i data-lucide="${icon}" class="h-5 w-5 text-white"></i></div><div><h4 class="font-bold text-white">${m.judul}</h4><p class="text-sm text-slate-400">${m.tgl}</p></div></div>`;
+                dContainer.innerHTML += `<div class="flex gap-8 relative"><div class="w-14 h-14 rounded-2xl bg-slate-900 border border-slate-800 flex items-center justify-center shrink-0 z-10 text-white"><i data-lucide="${icon}" class="h-6 w-6"></i></div><div class="flex-1 bg-slate-900/50 border border-slate-800 p-6 rounded-2xl"><h4 class="text-lg font-bold text-white uppercase">${m.judul}</h4><p class="text-slate-400 text-xs mt-1">Update: ${m.tgl}</p></div></div>`;
+            });
+            lucide.createIcons();
+        }
+    }
+
+    // LOGIKA DOWNLOAD (DENGAN FIX KOSONG)
+    async function downloadPDF(elementId, filename) {
+        const element = document.getElementById(elementId);
+        const originalBtn = event.currentTarget;
+        const originalHtml = originalBtn.innerHTML;
+
+        // Feedback Loading
+        originalBtn.innerHTML = '<i class="animate-spin" data-lucide="loader-2"></i> Generating...';
+        lucide.createIcons();
+
+        // FIX: Pindahkan elemen ke area terlihat sejenak agar html2pdf bisa membacanya
+        element.style.position = "relative";
+        element.style.left = "0";
+        element.style.zIndex = "50";
+
+        const opt = {
+            margin: 0.5,
+            filename: filename,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+
+        try {
+            await html2pdf().set(opt).from(element).save();
+        } catch (err) {
+            console.error("PDF Error:", err);
+            alert("Gagal mengunduh dokumen.");
+        } finally {
+            // Sembunyikan kembali
+            element.style.position = "absolute";
+            element.style.left = "-9999px";
+            originalBtn.innerHTML = originalHtml;
+            lucide.createIcons();
+        }
+    }
+
+    document.getElementById('btn-download-inv').addEventListener('click', () => {
+        downloadPDF('invoice-template', `Invoice_${window.currentProjectId}.pdf`);
+    });
+
+    document.getElementById('btn-download-mou').addEventListener('click', () => {
+        downloadPDF('mou-template', `MoU_Sciedutech_${window.currentProjectId}.pdf`);
+    });
+
+    // Navigation Logic
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const tabPanes = document.querySelectorAll('.tab-pane');
+
+    navBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            navBtns.forEach(b => {
+                b.className = "nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-slate-800 hover:text-white transition-all group";
+                const icon = b.querySelector('svg') || b.querySelector('i');
+                if(icon) icon.classList.remove('text-fuchsia-400');
+            });
+
+            btn.className = "nav-btn w-full flex items-center gap-4 p-3 rounded-xl bg-fuchsia-500/10 text-fuchsia-400 border border-fuchsia-500/20 transition-all group";
+            const activeIcon = btn.querySelector('svg') || btn.querySelector('i');
+            if(activeIcon) activeIcon.classList.add('text-fuchsia-400');
+
+            tabPanes.forEach(pane => {
+                pane.classList.remove('tab-active');
+                pane.classList.add('tab-hidden');
+            });
+
+            const target = document.getElementById(btn.getAttribute('data-target'));
+            if(target) {
+                target.classList.remove('tab-hidden');
+                target.classList.add('tab-active');
+            }
+        });
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+        if(confirm('Terminasi akses ke portal?')) {
+            localStorage.removeItem('sciedutechActiveClient');
+            window.location.href = 'index.html';
+        }
+    });
+
+    document.getElementById('supportForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        const wa = `https://wa.me/6285748175548?text=*SUPPORT TIKET*%0AKlien: ${activeClient.name}%0AID: ${activeClient.id}%0APesan: ${document.getElementById('supportMessage').value}`;
+        window.open(wa, '_blank');
+    });
+
+    lucide.createIcons();
+</script>
 </body>
 </html>

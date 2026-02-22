@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client Portal - Sciedutech.id</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 font-sans selection:bg-fuchsia-200 selection:text-fuchsia-900 min-h-screen flex items-center justify-center relative overflow-hidden">
+
+    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20 z-0"></div>
+    <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 z-0 opacity-80"></div>
+    
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-fuchsia-600/20 rounded-full blur-[100px] pointer-events-none animate-pulse"></div>
+    <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-[100px] pointer-events-none animate-pulse delay-700"></div>
+
+    <a href="index.html" class="absolute top-8 left-8 z-50 text-slate-400 hover:text-fuchsia-400 flex items-center gap-2 font-mono text-sm uppercase tracking-widest transition-colors group">
+        <i data-lucide="arrow-left" class="h-4 w-4 transform group-hover:-translate-x-1 transition-transform"></i> Kembali ke Beranda
+    </a>
+
+    <div class="relative z-10 w-full max-w-5xl px-4 flex flex-col md:flex-row items-center gap-8 md:gap-0">
+        
+        <div class="w-full md:w-1/2 p-8 md:pr-16 text-center md:text-left">
+            <div class="inline-flex items-center gap-3 mb-6 justify-center md:justify-start">
+                <img src="assets/images/logo-sciedutech.gif" alt="Logo" class="h-12 w-12 drop-shadow-[0_0_10px_rgba(217,70,239,0.5)]">
+                <span class="font-bold text-2xl text-white tracking-tight">sciedutech<span class="text-fuchsia-400">.id</span></span>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-white mb-4 tracking-tight">
+                Client <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Portal</span>
+            </h1>
+            <p class="text-slate-400 text-lg leading-relaxed mb-8">
+                Akses khusus klien untuk melacak progres <i>development</i>, meninjau rancangan UI/UX, dan mengelola dokumen proyek (MoU & Invoice) secara <i>real-time</i>.
+            </p>
+            
+            <div class="hidden md:flex items-center gap-4 text-xs font-mono text-slate-500">
+                <span class="flex items-center gap-1"><i data-lucide="shield-check" class="h-4 w-4 text-emerald-500"></i> Secure Connection</span>
+                <span class="flex items-center gap-1"><i data-lucide="server" class="h-4 w-4 text-blue-500"></i> System Online</span>
+            </div>
+        </div>
+
+        <div class="w-full md:w-1/2 max-w-md mx-auto">
+            <div class="bg-slate-900/60 backdrop-blur-xl border border-slate-700 rounded-3xl p-8 shadow-[0_0_40px_-10px_rgba(217,70,239,0.15)] relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-fuchsia-500"></div>
+
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold text-white mb-2" id="form-title">Otorisasi Sistem</h2>
+                    <p class="text-slate-400 text-sm" id="form-subtitle">Masukkan kredensial yang diberikan oleh tim kami.</p>
+                </div>
+
+                <form id="clientAuthForm" class="space-y-5 relative z-10">
+                    
+                    <div id="registerNameField" class="hidden">
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-widest mb-2">Nama Proyek / Klien</label>
+                        <div class="relative">
+                            <i data-lucide="briefcase" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"></i>
+                            <input type="text" id="clientNameInput" class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all placeholder:text-slate-600" placeholder="Misal: Waroeng Andya">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-widest mb-2">Email Identitas</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"></i>
+                            <input type="email" id="clientEmailInput" required class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl py-3 pl-12 pr-4 focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all placeholder:text-slate-600" placeholder="admin@klien.com">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-mono text-slate-400 uppercase tracking-widest mb-2">Kode Akses</label>
+                        <div class="relative">
+                            <i data-lucide="lock" class="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-500"></i>
+                            <input type="password" id="clientPasswordInput" required class="w-full bg-slate-950 border border-slate-700 text-white rounded-xl py-3 pl-12 pr-12 focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all placeholder:text-slate-600" placeholder="••••••••">
+                            <button type="button" id="togglePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-white transition-colors">
+                                <i data-lucide="eye" class="h-5 w-5" id="eyeIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="errorMessage" class="hidden bg-red-500/10 border border-red-500/50 text-red-400 text-sm p-3 rounded-lg flex items-center gap-2">
+                        <i data-lucide="alert-circle" class="h-4 w-4"></i>
+                        <span id="errorText">Kredensial tidak valid.</span>
+                    </div>
+
+                    <button type="submit" id="authSubmitBtn" class="w-full bg-gradient-to-r from-blue-600 to-fuchsia-600 hover:from-blue-500 hover:to-fuchsia-500 text-white font-bold py-3.5 px-4 rounded-xl transition-all transform hover:-translate-y-1 shadow-[0_0_20px_rgba(217,70,239,0.3)] flex items-center justify-center gap-2 mt-4 uppercase tracking-widest text-sm">
+                        <span>Initialize_Login</span> <i data-lucide="log-in" class="h-4 w-4"></i>
+                    </button>
+                </form>
+
+                <div class="mt-8 pt-6 border-t border-slate-800 text-center">
+                    <p class="text-sm text-slate-400 font-mono" id="toggleText">
+                        Belum memiliki akses dashboard? 
+                        <button type="button" id="toggleModeBtn" class="text-fuchsia-400 hover:text-fuchsia-300 font-bold ml-1 border-b border-dashed border-fuchsia-400/50">Buat Simulasi Klien</button>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        // Konfigurasi Asli Firebase Anda
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7_DlF7cuWjT6T3dIfQq0BCLeuKIcyFrQ",
+            authDomain: "sciedutech-platform.firebaseapp.com",
+            databaseURL: "https://sciedutech-platform-default-rtdb.firebaseio.com",
+            projectId: "sciedutech-platform",
+            storageBucket: "sciedutech-platform.firebasestorage.app",
+            messagingSenderId: "548051165082",
+            appId: "1:548051165082:web:281d741d46277ff4432423"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Inisialisasi ikon
+        lucide.createIcons();
+
+        // Elemen DOM
+        const authForm = document.getElementById('clientAuthForm');
+        const toggleModeBtn = document.getElementById('toggleModeBtn');
+        const registerNameField = document.getElementById('registerNameField');
+        const clientNameInput = document.getElementById('clientNameInput');
+        const clientEmailInput = document.getElementById('clientEmailInput');
+        const clientPasswordInput = document.getElementById('clientPasswordInput');
+        const togglePassword = document.getElementById('togglePassword');
+        const eyeIcon = document.getElementById('eyeIcon');
+        
+        const formTitle = document.getElementById('form-title');
+        const formSubtitle = document.getElementById('form-subtitle');
+        const authSubmitBtn = document.querySelector('#authSubmitBtn span');
+        const toggleText = document.getElementById('toggleText');
+        const errorMessage = document.getElementById('errorMessage');
+        const errorText = document.getElementById('errorText');
+
+        let isLogin = true; // State penentu
+
+        // Logika Lihat Password
+        togglePassword.addEventListener('click', () => {
+            if (clientPasswordInput.type === 'password') {
+                clientPasswordInput.type = 'text';
+                eyeIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                clientPasswordInput.type = 'password';
+                eyeIcon.setAttribute('data-lucide', 'eye');
+            }
+            lucide.createIcons();
+        });
+
+        // Logika Toggle Login / Register
+        document.body.addEventListener('click', (e) => {
+            if(e.target && e.target.id === 'toggleModeBtn') {
+                isLogin = !isLogin;
+                errorMessage.classList.add('hidden');
+
+                if (isLogin) {
+                    formTitle.textContent = 'Otorisasi Sistem';
+                    formSubtitle.textContent = 'Masukkan kredensial yang diberikan oleh tim kami.';
+                    registerNameField.classList.add('hidden');
+                    clientNameInput.removeAttribute('required');
+                    authSubmitBtn.textContent = 'Initialize_Login';
+                    
+                    toggleText.innerHTML = `Belum memiliki akses dashboard? <button type="button" id="toggleModeBtn" class="text-fuchsia-400 hover:text-fuchsia-300 font-bold ml-1 border-b border-dashed border-fuchsia-400/50">Buat Simulasi Klien</button>`;
+                } else {
+                    formTitle.textContent = 'Registrasi Simulasi Klien';
+                    formSubtitle.textContent = 'Buat akun lokal sementara untuk mencoba dashboard.';
+                    registerNameField.classList.remove('hidden');
+                    clientNameInput.setAttribute('required', 'true');
+                    authSubmitBtn.textContent = 'Create_Simulation';
+                    
+                    toggleText.innerHTML = `Sudah memiliki kredensial resmi? <button type="button" id="toggleModeBtn" class="text-fuchsia-400 hover:text-fuchsia-300 font-bold ml-1 border-b border-dashed border-fuchsia-400/50">Login Sistem</button>`;
+                }
+            }
+        });
+
+        // ==========================================
+        // LOGIKA AUTENTIKASI UTAMA (FIREBASE + LOKAL)
+        // ==========================================
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            errorMessage.classList.add('hidden');
+
+            const email = clientEmailInput.value;
+            const password = clientPasswordInput.value;
+            
+            // Animasi tombol loading
+            const btnOriginalText = authSubmitBtn.textContent;
+            authSubmitBtn.innerHTML = '<i class="animate-spin" data-lucide="loader"></i> Processing...';
+            lucide.createIcons();
+
+            if (!isLogin) {
+                // --- PROSES DAFTAR SIMULASI (Hanya Lokal) ---
+                setTimeout(() => {
+                    let clientsDb = JSON.parse(localStorage.getItem('sciedutechClients')) || [];
+                    const name = clientNameInput.value;
+                    const exists = clientsDb.find(c => c.email === email);
+                    
+                    if (exists) {
+                        showError('Email simulasi ini sudah digunakan.');
+                        authSubmitBtn.textContent = btnOriginalText;
+                    } else {
+                        const newClient = {
+                            id: 'CL-' + Math.floor(Math.random() * 10000),
+                            name: name,
+                            email: email,
+                            password: password,
+                            status: 'active',
+                            joined: new Date().toISOString()
+                        };
+                        clientsDb.push(newClient);
+                        localStorage.setItem('sciedutechClients', JSON.stringify(clientsDb));
+                        
+                        localStorage.setItem('sciedutechActiveClient', JSON.stringify(newClient));
+                        window.location.href = 'dashboard-client.html';
+                    }
+                }, 800);
+            } else {
+                // --- PROSES LOGIN RESMI (Cek Firebase Dulu) ---
+                try {
+                    const authRef = ref(db, 'auth_users');
+                    const snapshot = await get(authRef);
+                    let userFound = null;
+
+                    if (snapshot.exists()) {
+                        const users = snapshot.val();
+                        // Cari data user yang cocok email dan passwordnya
+                        for (const key in users) {
+                            if (users[key].email === email && users[key].password === password) {
+                                userFound = users[key];
+                                break;
+                            }
+                        }
+                    }
+
+                    if (userFound) {
+                        // Jika ketemu di Firebase Admin, langsung Login!
+                        localStorage.setItem('sciedutechActiveClient', JSON.stringify(userFound));
+                        window.location.href = 'dashboard-client.html';
+                    } else {
+                        // Jika tidak ada di Firebase, cari di Local Storage (Siapa tau ini akun Simulasi)
+                        let clientsDb = JSON.parse(localStorage.getItem('sciedutechClients')) || [];
+                        const localClient = clientsDb.find(c => c.email === email && c.password === password);
+                        
+                        if (localClient) {
+                            localStorage.setItem('sciedutechActiveClient', JSON.stringify(localClient));
+                            window.location.href = 'dashboard-client.html';
+                        } else {
+                            showError('Akses Ditolak: Email atau Kode Akses tidak valid.');
+                            authSubmitBtn.textContent = btnOriginalText;
+                            lucide.createIcons();
+                        }
+                    }
+                } catch (error) {
+                    console.error("Firebase Error:", error);
+                    showError('Koneksi ke server gagal. Periksa jaringan Anda.');
+                    authSubmitBtn.textContent = btnOriginalText;
+                    lucide.createIcons();
+                }
+            }
+        });
+
+        function showError(msg) {
+            errorText.textContent = msg;
+            errorMessage.classList.remove('hidden');
+            authForm.classList.add('animate-[shake_0.5s_ease-in-out]');
+            setTimeout(() => authForm.classList.remove('animate-[shake_0.5s_ease-in-out]'), 500);
+        }
+    </script>
+</body>
+</html>

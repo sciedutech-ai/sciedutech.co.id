@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Root Admin - Sciedutech</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .glass-card {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        /* Animasi Tab Transisi Halus */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .tab-active { animation: fadeIn 0.4s ease-out forwards; display: block; }
+        .tab-hidden { display: none; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-200 min-h-screen font-sans flex overflow-hidden">
+
+    <aside class="w-20 lg:w-64 bg-slate-950 border-r border-amber-500/20 flex flex-col z-20 relative">
+        <div class="absolute inset-0 bg-gradient-to-b from-amber-900/10 to-transparent pointer-events-none"></div>
+        
+        <div class="p-6 flex items-center gap-3 relative z-10">
+            <div class="w-8 h-8 rounded-lg bg-amber-500 flex items-center justify-center text-slate-900 shadow-[0_0_15px_rgba(245,158,11,0.5)]">
+                <i data-lucide="terminal" class="h-5 w-5"></i>
+            </div>
+            <span class="font-bold text-lg text-white hidden lg:block tracking-widest uppercase">Root<span class="text-amber-500">.Sys</span></span>
+        </div>
+
+        <nav class="flex-1 px-4 py-6 space-y-2 relative z-10" id="sidebar-nav">
+            <button data-target="tab-manajemen" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/30 transition-all group">
+                <i data-lucide="user-plus" class="h-5 w-5 shrink-0"></i>
+                <span class="font-bold hidden lg:block text-left w-full uppercase text-sm tracking-wider">Klien Baru</span>
+            </button>
+            <button data-target="tab-update" class="nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-900 hover:text-slate-300 transition-all group">
+                <i data-lucide="database" class="h-5 w-5 shrink-0 group-hover:text-amber-500"></i>
+                <span class="font-medium hidden lg:block text-left w-full text-sm">Update Proyek</span>
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-amber-500/20 relative z-10">
+            <a href="index.html" class="w-full flex items-center gap-4 p-3 rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400 transition-all group">
+                <i data-lucide="power" class="h-5 w-5 shrink-0"></i>
+                <span class="font-bold hidden lg:block text-left w-full text-sm">Exit Terminal</span>
+            </a>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col h-screen overflow-y-auto bg-[url('https://www.transparenttextures.com/patterns/black-scales.png')] relative">
+        
+        <header class="p-8 flex justify-between items-center border-b border-amber-500/10 bg-slate-950/80 backdrop-blur-md sticky top-0 z-10">
+            <div>
+                <h1 class="text-2xl md:text-3xl font-black text-white tracking-tight">Data Control Center</h1>
+                <p class="text-amber-500 font-mono text-xs mt-1 uppercase tracking-widest flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span> Write Access Granted
+                </p>
+            </div>
+        </header>
+
+        <div class="p-8 max-w-5xl mx-auto w-full">
+            
+            <div id="tab-manajemen" class="tab-pane tab-active">
+                <div class="glass-card p-8 rounded-3xl mb-8">
+                    <h3 class="text-white font-bold mb-6 uppercase tracking-widest text-sm border-b border-slate-700 pb-2 flex items-center gap-2">
+                        <i data-lucide="shield" class="h-4 w-4 text-amber-500"></i> Registrasi Akses Klien
+                    </h3>
+                    <p class="text-slate-400 text-sm mb-6">Buat kredensial login (Email & Password) untuk klien baru. Data ini akan disimpan di Firebase agar klien bisa login ke <i>Client Portal</i>.</p>
+                    
+                    <form id="createClientForm" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-400 mb-2">ID Proyek Baru</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="newClientId" class="w-full bg-slate-900 border border-slate-700 text-white font-mono rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none uppercase" placeholder="Misal: SC-7822" required>
+                                    <button type="button" id="generateIdBtn" class="bg-slate-800 hover:bg-slate-700 text-amber-500 px-3 rounded-lg border border-slate-700 text-xs font-mono transition-colors">Auto</button>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-400 mb-2">Nama Klien / Perusahaan</label>
+                                <input type="text" id="newClientName" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" placeholder="Waroeng Andya" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-amber-400 mb-2">Email Akses Klien</label>
+                                <input type="email" id="newClientEmail" class="w-full bg-slate-900 border border-amber-500/30 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" placeholder="client@email.com" required>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-amber-400 mb-2">Password Akses</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="newClientPassword" class="w-full bg-slate-900 border border-amber-500/30 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" placeholder="Minimal 6 Karakter" required>
+                                    <button type="button" id="generatePassBtn" class="bg-slate-800 hover:bg-slate-700 text-amber-500 px-3 rounded-lg border border-slate-700 text-xs font-mono transition-colors">Auto</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="pt-4 flex justify-end">
+                            <button type="submit" id="saveClientBtn" class="bg-amber-600 hover:bg-amber-500 text-slate-900 font-bold py-3 px-8 rounded-xl transition-all shadow-[0_0_15px_rgba(245,158,11,0.3)] flex items-center gap-2">
+                                <i data-lucide="user-check" class="h-4 w-4"></i> Daftarkan Klien
+                            </button>
+                        </div>
+                        <p id="clientSaveStatus" class="text-xs font-mono text-emerald-400 text-right hidden mt-2">Klien berhasil didaftarkan!</p>
+                    </form>
+                </div>
+            </div>
+
+            <div id="tab-update" class="tab-pane tab-hidden">
+                <div class="grid lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-1 space-y-6">
+                        <div class="glass-card p-6 rounded-3xl">
+                            <h3 class="text-white font-bold mb-4 uppercase tracking-widest text-sm border-b border-slate-700 pb-2 flex items-center gap-2">
+                                <i data-lucide="search" class="h-4 w-4 text-amber-500"></i> Cari Database
+                            </h3>
+                            <label class="block text-xs font-mono text-slate-400 mb-2">ID Proyek Target</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="searchId" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2 px-3 focus:ring-1 focus:ring-amber-500 outline-none font-mono text-sm uppercase" placeholder="SC-XXXX">
+                                <button id="loadBtn" class="bg-amber-600 hover:bg-amber-500 text-slate-900 font-bold px-4 py-2 rounded-lg transition-colors">
+                                    Load
+                                </button>
+                            </div>
+                            <p id="loadStatus" class="text-xs font-mono mt-3 text-slate-500"></p>
+                        </div>
+
+                        <button id="saveBtn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-500 hover:from-emerald-500 hover:to-teal-400 text-white font-black uppercase tracking-widest shadow-[0_0_20px_rgba(16,185,129,0.3)] transition-all transform hover:-translate-y-1 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i data-lucide="upload-cloud" class="h-5 w-5"></i> Push to Server
+                        </button>
+                        <p id="saveMessage" class="text-xs text-center font-mono text-emerald-400 hidden animate-pulse">Database berhasil diperbarui!</p>
+                    </div>
+
+                    <div class="lg:col-span-2 glass-card p-6 md:p-8 rounded-3xl relative">
+                        <div id="editorOverlay" class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm z-10 flex flex-col items-center justify-center rounded-3xl border border-amber-500/20">
+                            <i data-lucide="lock" class="h-10 w-10 text-amber-500 mb-3"></i>
+                            <p class="text-slate-400 font-mono text-sm">Menunggu input ID Proyek...</p>
+                        </div>
+
+                        <h3 class="text-white font-bold mb-6 uppercase tracking-widest text-sm border-b border-slate-700 pb-2 flex items-center gap-2">
+                            <i data-lucide="edit-3" class="h-4 w-4 text-amber-500"></i> Editor Master Data
+                        </h3>
+
+                        <form id="adminForm" class="space-y-6">
+                            <div class="grid grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">Nama Klien (Read-only)</label>
+                                    <input type="text" id="editClientName" class="w-full bg-slate-900 border border-slate-700 text-slate-400 rounded-lg py-2.5 px-3 outline-none" readonly>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">Progres Keseluruhan (%)</label>
+                                    <input type="number" id="editProgress" class="w-full bg-slate-900 border border-slate-700 text-amber-400 font-bold rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" min="0" max="100">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">Estimasi Rilis</label>
+                                    <input type="text" id="editEstimate" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">Status Pembayaran</label>
+                                    <input type="text" id="editPayment" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="pt-6 mt-6 border-t border-slate-800 grid grid-cols-2 gap-6">
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-mono text-amber-500 mb-2 uppercase tracking-widest">Data Invoice & MoU</label>
+                                    <p class="text-[10px] text-slate-500 mb-2">Data ini akan digunakan untuk fitur Download PDF otomatis di Dashboard Klien.</p>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">No. Invoice</label>
+                                    <input type="text" id="editInvNo" class="w-full bg-slate-900 border border-slate-700 text-white rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" placeholder="INV/2026/001">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-mono text-slate-400 mb-2">Total Tagihan (Rp)</label>
+                                    <input type="number" id="editInvAmount" class="w-full bg-slate-900 border border-slate-700 text-emerald-400 font-bold rounded-lg py-2.5 px-3 focus:ring-1 focus:ring-amber-500 outline-none" placeholder="5000000">
+                                </div>
+                            </div>
+
+                            <div class="pt-6 mt-6 border-t border-slate-800">
+                                <label class="block text-xs font-mono text-amber-500 mb-4 uppercase tracking-widest">Update Milestone Pengerjaan</label>
+                                <div class="space-y-4" id="milestoneEditorContainer">
+                                    </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getDatabase, ref, get, update, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+        // GANTI DENGAN KODE FIREBASE ANDA SENDIRI DI SINI
+        const firebaseConfig = {
+            apiKey: "AIzaSyA7_DlF7cuWjT6T3dIfQq0BCLeuKIcyFrQ",
+            authDomain: "sciedutech-platform.firebaseapp.com",
+            databaseURL: "https://sciedutech-platform-default-rtdb.firebaseio.com",
+            projectId: "sciedutech-platform",
+            storageBucket: "sciedutech-platform.firebasestorage.app",
+            messagingSenderId: "548051165082",
+            appId: "1:548051165082:web:281d741d46277ff4432423"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        lucide.createIcons();
+
+// =========================================
+        // LOGIKA TAB NAVIGASI (SUDAH DIPERBAIKI)
+        // =========================================
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const tabPanes = document.querySelectorAll('.tab-pane');
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 1. Matikan (Reset) semua tombol
+                navBtns.forEach(b => {
+                    b.className = "nav-btn w-full flex items-center gap-4 p-3 rounded-xl text-slate-500 hover:bg-slate-900 hover:text-slate-300 transition-all group";
+                    const span = b.querySelector('span');
+                    if (span) span.className = "font-medium hidden lg:block text-left w-full text-sm";
+                    
+                    // Gunakan 'svg' karena Lucide sudah merubah tag 'i'
+                    const icon = b.querySelector('svg') || b.querySelector('i');
+                    if (icon) icon.classList.remove('text-amber-500');
+                });
+
+                // 2. Nyalakan tombol yang sedang diklik
+                btn.className = "nav-btn w-full flex items-center gap-4 p-3 rounded-xl bg-amber-500/10 text-amber-500 border border-amber-500/30 transition-all group";
+                const activeSpan = btn.querySelector('span');
+                if (activeSpan) activeSpan.className = "font-bold hidden lg:block text-left w-full uppercase text-sm tracking-wider";
+                
+                const activeIcon = btn.querySelector('svg') || btn.querySelector('i');
+                if (activeIcon) activeIcon.classList.add('text-amber-500');
+
+                // 3. Sembunyikan semua tab content
+                tabPanes.forEach(pane => {
+                    pane.classList.remove('tab-active');
+                    pane.classList.add('tab-hidden');
+                });
+
+                // 4. Tampilkan tab yang sesuai dengan data-target
+                const targetId = btn.getAttribute('data-target');
+                const targetPane = document.getElementById(targetId);
+                if (targetPane) {
+                    targetPane.classList.remove('tab-hidden');
+                    targetPane.classList.add('tab-active');
+                }
+            });
+        });
+        // =========================================
+        // LOGIKA TAB 1: REGISTRASI KLIEN BARU
+        // =========================================
+        document.getElementById('generateIdBtn').addEventListener('click', () => {
+            document.getElementById('newClientId').value = 'SC-' + Math.floor(Math.random() * 9000 + 1000);
+        });
+
+        document.getElementById('generatePassBtn').addEventListener('click', () => {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#";
+            let pass = "";
+            for (let i = 0; i < 8; i++) pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            document.getElementById('newClientPassword').value = pass;
+        });
+
+        const createClientForm = document.getElementById('createClientForm');
+        createClientForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('saveClientBtn');
+            const statusMsg = document.getElementById('clientSaveStatus');
+            
+            const id = document.getElementById('newClientId').value.trim().toUpperCase();
+            const name = document.getElementById('newClientName').value;
+            const email = document.getElementById('newClientEmail').value;
+            const password = document.getElementById('newClientPassword').value;
+
+            btn.innerHTML = '<i data-lucide="loader" class="h-4 w-4 animate-spin"></i> Memproses...';
+            lucide.createIcons();
+
+            try {
+                // 1. Simpan Akun Klien ke Database "auth_users"
+                const authRef = ref(db, `auth_users/${id}`);
+                await set(authRef, { id, name, email, password, role: "client" });
+
+                // 2. Buat Struktur Proyek Kosong Pertama Kali di Database "projects"
+                const projectRef = ref(db, `projects/${id}`);
+                await set(projectRef, {
+                    clientName: name,
+                    progress: 0,
+                    estimateDate: "TBD",
+                    paymentStatus: "Menunggu Tagihan",
+                    invoice: { no: `INV/2026/${id.split('-')[1] || "001"}`, amount: 0 },
+                    milestones: [
+                        { judul: "Riset & Wireframing", tgl: "-", status: "pending" },
+                        { judul: "Desain UI/UX", tgl: "-", status: "pending" },
+                        { judul: "Development Web/Sistem", tgl: "-", status: "pending" },
+                        { judul: "Testing & Rilis Server", tgl: "-", status: "pending" }
+                    ]
+                });
+
+                // UI Sukses
+                btn.innerHTML = '<i data-lucide="check" class="h-4 w-4"></i> Selesai';
+                btn.classList.replace('bg-amber-600', 'bg-emerald-600');
+                lucide.createIcons();
+                statusMsg.classList.remove('hidden');
+                
+                // Generate link WA ke klien
+                const waText = `Halo Bapak/Ibu dari *${name}*,%0A%0ABerikut adalah akses *Client Portal* Anda untuk memantau progres project:%0A%0A🌐 *Link:* https://sciedutech.id/login.html%0A✉️ *Email:* ${email}%0A🔑 *Pass:* ${password}%0A%0AHarap simpan data ini. Terima kasih!`;
+                
+                setTimeout(() => {
+                    btn.innerHTML = '<i data-lucide="user-check" class="h-4 w-4"></i> Daftarkan Klien';
+                    btn.classList.replace('bg-emerald-600', 'bg-amber-600');
+                    statusMsg.classList.add('hidden');
+                    lucide.createIcons();
+                    
+                    createClientForm.reset(); // Cara yang benar untuk mereset form
+                    
+                    window.open(`https://wa.me/?text=${waText}`, '_blank');
+                }, 2000);
+
+            } catch (error) {
+                console.error("Gagal mendaftarkan klien:", error);
+                alert("Gagal mendaftarkan klien. Periksa koneksi atau Rules Firebase.");
+                btn.innerHTML = '<i data-lucide="user-check" class="h-4 w-4"></i> Daftarkan Klien';
+                lucide.createIcons();
+            }
+        });
+
+        // =========================================
+        // LOGIKA TAB 2: UPDATE DATA PROYEK
+        // =========================================
+        let currentLoadedId = null;
+        let currentMilestones = [];
+
+        document.getElementById('loadBtn').addEventListener('click', async () => {
+            const id = document.getElementById('searchId').value.trim().toUpperCase();
+            if(!id) return;
+
+            const loadBtn = document.getElementById('loadBtn');
+            const loadStatus = document.getElementById('loadStatus');
+            
+            loadBtn.textContent = '...';
+            loadStatus.textContent = `Mencari /projects/${id}...`;
+            loadStatus.className = "text-xs font-mono mt-3 text-amber-500 animate-pulse";
+
+            try {
+                const projectRef = ref(db, `projects/${id}`);
+                const snapshot = await get(projectRef);
+
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    
+                    document.getElementById('editClientName').value = data.clientName || "";
+                    document.getElementById('editProgress').value = data.progress || 0;
+                    document.getElementById('editEstimate').value = data.estimateDate || "";
+                    document.getElementById('editPayment').value = data.paymentStatus || "";
+                    
+                    document.getElementById('editInvNo').value = data.invoice?.no || "";
+                    document.getElementById('editInvAmount').value = data.invoice?.amount || 0;
+                    
+                    currentMilestones = Array.isArray(data.milestones) ? data.milestones : Object.values(data.milestones || {});
+                    renderMilestoneEditor(currentMilestones);
+
+                    currentLoadedId = id;
+                    document.getElementById('editorOverlay').classList.add('hidden');
+                    loadStatus.textContent = "Data ditemukan dan siap diedit.";
+                    loadStatus.className = "text-xs font-mono mt-3 text-emerald-500";
+                } else {
+                    loadStatus.textContent = "ID tidak ditemukan. Silakan buat klien baru di Tab Manajemen.";
+                    loadStatus.className = "text-xs font-mono mt-3 text-red-500 font-bold";
+                }
+            } catch (error) {
+                console.error(error);
+                loadStatus.textContent = "Akses ditolak (Cek Rules Firebase).";
+                loadStatus.className = "text-xs font-mono mt-3 text-red-500 font-bold";
+            }
+            loadBtn.textContent = 'Load';
+        });
+
+        function renderMilestoneEditor(milestones) {
+            const container = document.getElementById('milestoneEditorContainer');
+            container.innerHTML = '';
+            milestones.forEach((m, index) => {
+                container.innerHTML += `
+                    <div class="flex gap-4 items-center bg-slate-900/50 p-3 rounded-xl border border-slate-800">
+                        <div class="w-6 h-6 rounded bg-slate-800 flex items-center justify-center text-xs font-mono text-slate-500 shrink-0">${index + 1}</div>
+                        <input type="text" id="m_judul_${index}" value="${m.judul}" class="w-1/3 bg-transparent border-b border-slate-700 text-white py-1 outline-none text-sm" placeholder="Nama Tahap">
+                        <input type="text" id="m_tgl_${index}" value="${m.tgl}" class="w-1/4 bg-transparent border-b border-slate-700 text-slate-400 py-1 outline-none text-sm font-mono" placeholder="Keterangan Tgl">
+                        <select id="m_status_${index}" class="flex-1 bg-slate-800 text-white rounded px-2 py-1 outline-none text-sm border border-slate-700 focus:border-amber-500 cursor-pointer">
+                            <option value="selesai" ${m.status === 'selesai' ? 'selected' : ''}>✅ Selesai</option>
+                            <option value="proses" ${m.status === 'proses' ? 'selected' : ''}>🔄 Proses</option>
+                            <option value="pending" ${m.status === 'pending' ? 'selected' : ''}>⏳ Pending</option>
+                        </select>
+                    </div>
+                `;
+            });
+        }
+
+        document.getElementById('saveBtn').addEventListener('click', async () => {
+            if(!currentLoadedId) return;
+
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i data-lucide="loader" class="h-5 w-5 animate-spin"></i> Menyimpan...';
+            lucide.createIcons();
+
+            const updatedMilestones = [];
+            for (let i = 0; i < currentMilestones.length; i++) {
+                updatedMilestones.push({
+                    judul: document.getElementById(`m_judul_${i}`).value,
+                    tgl: document.getElementById(`m_tgl_${i}`).value,
+                    status: document.getElementById(`m_status_${i}`).value
+                });
+            }
+
+            const updateData = {
+                clientName: document.getElementById('editClientName').value,
+                progress: parseInt(document.getElementById('editProgress').value),
+                estimateDate: document.getElementById('editEstimate').value,
+                paymentStatus: document.getElementById('editPayment').value,
+                invoice: {
+                    no: document.getElementById('editInvNo').value,
+                    amount: document.getElementById('editInvAmount').value
+                },
+                milestones: updatedMilestones
+            };
+
+            try {
+                const projectRef = ref(db, `projects/${currentLoadedId}`);
+                await update(projectRef, updateData);
+
+                saveBtn.innerHTML = '<i data-lucide="check-circle" class="h-5 w-5"></i> Push to Server';
+                saveBtn.classList.replace('from-emerald-600', 'from-blue-600');
+                saveBtn.classList.replace('to-teal-500', 'to-indigo-500');
+                lucide.createIcons();
+                
+                document.getElementById('saveMessage').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('saveMessage').classList.add('hidden');
+                    saveBtn.classList.replace('from-blue-600', 'from-emerald-600');
+                    saveBtn.classList.replace('to-indigo-500', 'to-teal-500');
+                }, 3000);
+
+            } catch (error) {
+                console.error(error);
+                alert("Gagal menyimpan! Pastikan Anda memiliki akses Admin.");
+            }
+        });
+    </script>
+</body>
+</html>

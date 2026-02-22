@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofolio - Sciedutech.id</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-slate-950 font-sans selection:bg-fuchsia-200 selection:text-fuchsia-900 min-h-screen flex flex-col text-slate-300">
+
+     <nav class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex-shrink-0 flex items-center gap-3">
+                <img src="assets/images/logo-sciedutech.gif" alt="Logo Sciedutech" class="h-10 w-10 object-contain drop-shadow-md" />
+                <span class="font-bold text-xl text-white tracking-tight">sciedutech<span class="text-fuchsia-400">.id</span></span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="about.html" class="text-slate-300 hover:text-fuchsia-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Tentang Kami</a>
+                        <a href="service.html" class="text-slate-300 hover:text-fuchsia-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Layanan Jasa</a>
+                        <a href="news.html" class="text-slate-300 hover:text-fuchsia-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Berita</a>
+                        <a href="portfolio.html" class="text-slate-300 hover:text-fuchsia-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Portofolio</a>
+                        <a href="ebook.html" class="text-slate-300 hover:text-fuchsia-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">E-Book</a>
+                        <button id="loginBtn" class="bg-fuchsia-500 hover:bg-fuchsia-400 text-slate-900 px-5 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105">
+                            Client Login
+                        </button>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobileMenuBtn" class="text-slate-300 hover:text-white p-2">
+                        <i data-lucide="menu" class="h-6 w-6 menu-icon"></i>
+                        <i data-lucide="x" class="h-6 w-6 close-icon hidden"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="hidden md:hidden bg-slate-800 border-b border-slate-700">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="about.html" class="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tentang Kami</a>
+                <a href="service.html" class="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Layanan Jasa</a>
+                <a href="news.html" class="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Berita</a>
+                <a href="portfolio.html" class="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Portofolio</a>
+                <a href="ebook.html" class="text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium">E-Book</a>
+                <button id="mobileLoginBtn" class="w-full text-left text-fuchsia-400 hover:text-white block px-3 py-2 rounded-md text-base font-bold">Client Login</button>
+            </div>
+        </div>
+    </nav>
+    <header class="relative pt-32 pb-20 overflow-hidden border-b border-slate-800">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-20"></div>
+        <div class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-96 bg-fuchsia-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 reveal-up">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-slate-900 border border-slate-700 shadow-inner mb-6">
+                <i data-lucide="terminal" class="h-4 w-4 text-emerald-400 animate-pulse"></i>
+                <span class="text-slate-400 font-mono text-sm tracking-widest">root/projects/archive_v2</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black text-white mb-6 tracking-tight drop-shadow-lg">
+                Terminal <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-fuchsia-500">Eksekusi</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed font-mono">
+                <span id="data-stream" class="block text-emerald-400 text-sm md:text-base mb-3 h-6 overflow-hidden"></span>
+                Menampilkan rekam jejak arsitektur sistem, algoritma AI, dan desain UI/UX yang telah kami selesaikan.
+            </p>
+        </div>
+    </header>
+
+    <section class="py-8 bg-slate-900 border-b border-slate-800 sticky top-16 z-40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-wrap justify-center gap-4 reveal-up">
+                <button class="px-6 py-2 rounded-none border border-fuchsia-500 bg-fuchsia-500/10 text-fuchsia-400 font-mono text-sm font-bold uppercase tracking-widest shadow-[0_0_15px_rgba(217,70,239,0.3)] transition-all">
+                    // All_Systems
+                </button>
+                <button class="px-6 py-2 rounded-none border border-slate-700 bg-slate-950 hover:bg-slate-800 hover:border-slate-500 text-slate-400 font-mono text-sm uppercase tracking-widest transition-all">
+                    Web_App & POS
+                </button>
+                <button class="px-6 py-2 rounded-none border border-slate-700 bg-slate-950 hover:bg-slate-800 hover:border-slate-500 text-slate-400 font-mono text-sm uppercase tracking-widest transition-all">
+                    AI_Agents
+                </button>
+                <button class="px-6 py-2 rounded-none border border-slate-700 bg-slate-950 hover:bg-slate-800 hover:border-slate-500 text-slate-400 font-mono text-sm uppercase tracking-widest transition-all">
+                    WebGL_3D
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 relative overflow-hidden flex-1">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid md:grid-cols-2 gap-8 lg:gap-12">
+                
+                <div class="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden hover:border-fuchsia-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_40px_-10px_rgba(217,70,239,0.25)] reveal-up">
+                    
+                    <div class="h-80 relative overflow-hidden bg-slate-950 flex items-center justify-center border-b border-slate-800 group-hover:border-fuchsia-500/50 transition-colors duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-fuchsia-900/40 z-0 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
+                        
+                        <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-slate-600 group-hover:border-fuchsia-400 transition-colors z-20"></div>
+                        <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-slate-600 group-hover:border-fuchsia-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-slate-600 group-hover:border-fuchsia-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-slate-600 group-hover:border-fuchsia-400 transition-colors z-20"></div>
+
+                        <div class="absolute top-5 right-5 flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-none backdrop-blur-md z-30 shadow-lg">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest">Active</span>
+                        </div>
+
+                        <div class="relative z-20 text-slate-500 group-hover:text-fuchsia-400 transform group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(217,70,239,0.5)] text-center">
+                            <i data-lucide="coffee" class="h-24 w-24 mb-4 mx-auto"></i>
+                            <span class="text-3xl font-black tracking-[0.3em] opacity-30 group-hover:opacity-100 transition-opacity">WAROENG</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 relative">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-fuchsia-500/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none z-0"></div>
+
+                        <div class="relative z-10">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-blue-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="blocks" class="h-3 w-3"></i> React.js</span>
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-emerald-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="server" class="h-3 w-3"></i> Node.js</span>
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-fuchsia-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="credit-card" class="h-3 w-3"></i> Midtrans</span>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-3">Sistem POS & E-Menu Cerdas</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                                Digitalisasi alur pemesanan restoran. Dilengkapi dengan manajemen menu dinamis, kalkulasi otomatis, dan integrasi gerbang pembayaran tanpa kasir. Mempercepat <i>flow</i> transaksi hingga 40%.
+                            </p>
+                            
+                            <a href="index.html#kontak" class="inline-flex items-center justify-between w-full p-4 bg-slate-950 border border-slate-800 group-hover:bg-fuchsia-600/10 group-hover:border-fuchsia-500 transition-all duration-300">
+                                <span class="font-bold text-slate-300 group-hover:text-fuchsia-400 font-mono text-sm uppercase tracking-wider">Execute_Project</span>
+                                <i data-lucide="arrow-right" class="text-slate-500 group-hover:text-fuchsia-400 transform group-hover:translate-x-2 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_40px_-10px_rgba(59,130,246,0.25)] reveal-up delay-100">
+                    
+                    <div class="h-80 relative overflow-hidden bg-slate-950 flex items-center justify-center border-b border-slate-800 group-hover:border-blue-500/50 transition-colors duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-blue-900/40 z-0 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
+                        
+                        <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-slate-600 group-hover:border-blue-400 transition-colors z-20"></div>
+                        <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-slate-600 group-hover:border-blue-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-slate-600 group-hover:border-blue-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-slate-600 group-hover:border-blue-400 transition-colors z-20"></div>
+
+                        <div class="absolute top-5 right-5 flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-none backdrop-blur-md z-30 shadow-lg">
+                            <div class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></div>
+                            <span class="text-[10px] font-mono text-blue-400 font-bold uppercase tracking-widest">Deployed</span>
+                        </div>
+
+                        <div class="relative z-20 text-slate-500 group-hover:text-blue-400 transform group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(59,130,246,0.5)] text-center">
+                            <i data-lucide="box" class="h-24 w-24 mb-4 mx-auto"></i>
+                            <span class="text-3xl font-black tracking-[0.3em] opacity-30 group-hover:opacity-100 transition-opacity">ADIMARA</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 relative">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-blue-500/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none z-0"></div>
+
+                        <div class="relative z-10">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-blue-300 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="boxes" class="h-3 w-3"></i> Three.js</span>
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-amber-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="file-json" class="h-3 w-3"></i> WebGL</span>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-3">Katalog Galeri 3D Interaktif</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                                Membawa dimensi baru ke dalam web. Pengunjung dapat memutar, memperbesar, dan berinteraksi dengan aset visual 3D studio desain secara langsung dari browser mereka tanpa ngelag.
+                            </p>
+                            
+                            <a href="index.html#kontak" class="inline-flex items-center justify-between w-full p-4 bg-slate-950 border border-slate-800 group-hover:bg-blue-600/10 group-hover:border-blue-500 transition-all duration-300">
+                                <span class="font-bold text-slate-300 group-hover:text-blue-400 font-mono text-sm uppercase tracking-wider">Execute_Project</span>
+                                <i data-lucide="arrow-right" class="text-slate-500 group-hover:text-blue-400 transform group-hover:translate-x-2 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden hover:border-emerald-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_40px_-10px_rgba(16,185,129,0.25)] reveal-up">
+                    
+                    <div class="h-80 relative overflow-hidden bg-slate-950 flex items-center justify-center border-b border-slate-800 group-hover:border-emerald-500/50 transition-colors duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-br from-teal-900/40 to-emerald-900/40 z-0 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
+                        
+                        <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-slate-600 group-hover:border-emerald-400 transition-colors z-20"></div>
+                        <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-slate-600 group-hover:border-emerald-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-slate-600 group-hover:border-emerald-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-slate-600 group-hover:border-emerald-400 transition-colors z-20"></div>
+
+                        <div class="absolute top-5 right-5 flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-none backdrop-blur-md z-30 shadow-lg">
+                            <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                            <span class="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-widest">In_Training</span>
+                        </div>
+
+                        <div class="relative z-20 text-slate-500 group-hover:text-emerald-400 transform group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(16,185,129,0.5)] text-center">
+                            <i data-lucide="brain-circuit" class="h-24 w-24 mb-4 mx-auto"></i>
+                            <span class="text-3xl font-black tracking-[0.3em] opacity-30 group-hover:opacity-100 transition-opacity">SIDUU.AI</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 relative">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none z-0"></div>
+
+                        <div class="relative z-10">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-indigo-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="cpu" class="h-3 w-3"></i> LLM API</span>
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-yellow-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="terminal" class="h-3 w-3"></i> Python</span>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-3">Asisten Edukasi Virtual</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                                Mengembangkan otak kecerdasan buatan untuk menjawab pertanyaan interaktif, menyusun kuis dinamis, dan bertindak sebagai tutor pendamping pada <i>dashboard</i> belajar.
+                            </p>
+                            
+                            <a href="index.html#kontak" class="inline-flex items-center justify-between w-full p-4 bg-slate-950 border border-slate-800 group-hover:bg-emerald-600/10 group-hover:border-emerald-500 transition-all duration-300">
+                                <span class="font-bold text-slate-300 group-hover:text-emerald-400 font-mono text-sm uppercase tracking-wider">Execute_Project</span>
+                                <i data-lucide="arrow-right" class="text-slate-500 group-hover:text-emerald-400 transform group-hover:translate-x-2 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="group relative bg-slate-900/50 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden hover:border-sky-500/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_0_40px_-10px_rgba(14,165,233,0.25)] reveal-up delay-100">
+                    
+                    <div class="h-80 relative overflow-hidden bg-slate-950 flex items-center justify-center border-b border-slate-800 group-hover:border-sky-500/50 transition-colors duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-br from-slate-800/40 to-sky-900/40 z-0 group-hover:scale-110 transition-transform duration-700 ease-out"></div>
+                        
+                        <div class="absolute top-4 left-4 w-6 h-6 border-t-2 border-l-2 border-slate-600 group-hover:border-sky-400 transition-colors z-20"></div>
+                        <div class="absolute top-4 right-4 w-6 h-6 border-t-2 border-r-2 border-slate-600 group-hover:border-sky-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 left-4 w-6 h-6 border-b-2 border-l-2 border-slate-600 group-hover:border-sky-400 transition-colors z-20"></div>
+                        <div class="absolute bottom-4 right-4 w-6 h-6 border-b-2 border-r-2 border-slate-600 group-hover:border-sky-400 transition-colors z-20"></div>
+
+                        <div class="absolute top-5 right-5 flex items-center gap-2 bg-slate-950/80 border border-slate-800 px-3 py-1.5 rounded-none backdrop-blur-md z-30 shadow-lg">
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                            <span class="text-[10px] font-mono text-emerald-400 font-bold uppercase tracking-widest">Live_Server</span>
+                        </div>
+
+                        <div class="relative z-20 text-slate-500 group-hover:text-sky-400 transform group-hover:scale-110 transition-all duration-500 drop-shadow-[0_0_15px_rgba(14,165,233,0.5)] text-center">
+                            <i data-lucide="snowflake" class="h-24 w-24 mb-4 mx-auto"></i>
+                            <span class="text-3xl font-black tracking-[0.3em] opacity-30 group-hover:opacity-100 transition-opacity">FROZEN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="p-8 relative">
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-transparent via-sky-500/5 to-transparent -translate-y-full group-hover:translate-y-full transition-transform duration-1000 ease-in-out pointer-events-none z-0"></div>
+
+                        <div class="relative z-10">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-orange-400 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="flame" class="h-3 w-3"></i> Firebase</span>
+                                <span class="px-3 py-1 bg-slate-950 border border-slate-700 text-slate-300 rounded-sm text-xs font-mono font-bold flex items-center gap-1"><i data-lucide="layout" class="h-3 w-3"></i> Tailwind UI</span>
+                            </div>
+                            
+                            <h3 class="text-2xl font-bold text-white mb-3">Profil Perusahaan & Kemitraan</h3>
+                            <p class="text-slate-400 text-sm leading-relaxed mb-8">
+                                Antarmuka website bisnis premium untuk distributor <i>seafood</i>, diarsiteki dengan formulir registrasi <i>reseller</i> otomatis yang terhubung aman ke database sentral.
+                            </p>
+                            
+                            <a href="index.html#kontak" class="inline-flex items-center justify-between w-full p-4 bg-slate-950 border border-slate-800 group-hover:bg-sky-600/10 group-hover:border-sky-500 transition-all duration-300">
+                                <span class="font-bold text-slate-300 group-hover:text-sky-400 font-mono text-sm uppercase tracking-wider">Execute_Project</span>
+                                <i data-lucide="arrow-right" class="text-slate-500 group-hover:text-sky-400 transform group-hover:translate-x-2 transition-transform"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-400 pt-20 pb-10 border-t border-slate-900 relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-fuchsia-900/50 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
+                
+                <div class="lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i data-lucide="brain-circuit" class="h-8 w-8 text-fuchsia-500"></i>
+                        <span class="font-bold text-2xl text-white tracking-tight">sciedutech<span class="text-fuchsia-500">.id</span></span>
+                    </div>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-6">
+                        Menjembatani kerumitan sistem digital dengan kemudahan akses pengguna. Kami membangun ekosistem cerdas untuk bisnis dan institusi pendidikan.
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <a href="https://github.com/sciedutech-ai/" class="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:bg-fuchsia-500 hover:text-white transition-all border border-slate-800">
+                            <i data-lucide="github" class="h-5 w-5"></i>
+                        </a>
+                        <a href="https://www.instagram.com/sciedutech.id/" class="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:bg-fuchsia-500 hover:text-white transition-all border border-slate-800">
+                            <i data-lucide="instagram" class="h-5 w-5"></i>
+                        </a>
+                        <a href="https://www.youtube.com/@sciedugameofficial" class="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:bg-fuchsia-500 hover:text-white transition-all border border-slate-800">
+                            <i data-lucide="youtube" class="h-5 w-5"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/muhammad-rizky-ashdaqofillah-8a6aaa236" class="h-10 w-10 rounded-full bg-slate-900 flex items-center justify-center text-slate-400 hover:bg-fuchsia-500 hover:text-white transition-all border border-slate-800">
+                            <i data-lucide="linkedin" class="h-5 w-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6 tracking-wider text-sm uppercase">Layanan & Solusi</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Web App & POS Dashboard</a></li>
+                        <li><a href="#" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Integrasi AI & Chatbot</a></li>
+                        <li><a href="#" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Pustaka 3D WebGL</a></li>
+                        <li><a href="#" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> E-Commerce & Kemitraan</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6 tracking-wider text-sm uppercase">Edukasi & Produk</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#ebook" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Katalog E-Book</a></li>
+                        <li><a href="#ebook" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Modul Sains (IPA)</a></li>
+                        <li><a href="#ebook" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Modul Web & UI/UX</a></li>
+                        <li><a href="#filosofi" class="text-sm hover:text-fuchsia-400 transition-colors flex items-center gap-2"><i data-lucide="chevron-right" class="h-3 w-3"></i> Metodologi Belajar</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-6 tracking-wider text-sm uppercase">Hubungi Kami</h4>
+                    <ul class="space-y-4">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="h-5 w-5 text-fuchsia-500 mt-0.5 shrink-0"></i>
+                            <span class="text-sm text-slate-500">Indonesia<br>Tersedia untuk proyek *Remote*</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="mail" class="h-5 w-5 text-fuchsia-500 shrink-0"></i>
+                            <a href="mailto:sciedugame@gmail.com" class="text-sm hover:text-fuchsia-400 transition-colors">sciedugame@gmail.com</a>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="h-5 w-5 text-fuchsia-500 shrink-0"></i>
+                            <a href="#" class="text-sm hover:text-fuchsia-400 transition-colors">+62 857-4817-5548</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-8 border-t border-slate-900 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="text-sm text-slate-600">
+                    &copy; 2026 Sciedutech.id Digital Studio. All rights reserved.
+                </div>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-slate-600 hover:text-fuchsia-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-slate-600 hover:text-fuchsia-400 transition-colors">Terms of Service</a>
+                    <button id="footerLoginBtn" class="text-fuchsia-600 font-bold hover:text-fuchsia-500 transition-colors">Client Portal</button>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <a href="https://wa.me/6285748175548?text=Halo%20Sciedutech!%20Saya%20ingin%20berkonsultasi%20mengenai%20layanan%20pembuatan%20website%2Fsistem." target="_blank" 
+       class="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 flex items-center justify-center group"
+       title="Konsultasi via WhatsApp">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12.031 21.1717L12.029 21.1717C10.3686 21.1717 8.76106 20.7259 7.33777 19.897L7.05194 19.7275L2.94635 20.803L4.04169 16.7937L3.85497 16.4965C2.9465 15.05 2.47051 13.3855 2.47051 11.6669C2.47051 6.39088 6.7634 2.09796 12.0394 2.09796C14.5982 2.09918 17.0097 3.09722 18.8184 4.90799C20.6272 6.71876 21.6231 9.13111 21.6219 11.6912C21.6219 16.9673 17.329 21.1717 12.031 21.1717ZM7.50284 18.0645C8.89279 18.8893 10.4357 19.3331 12.031 19.3331L12.033 19.3331C16.2731 19.3331 19.7233 15.8829 19.7233 11.6428C19.7233 7.40266 16.2741 3.95246 12.034 3.95246C7.79288 3.95246 4.34267 7.40266 4.34267 11.6428C4.34267 13.327 4.8211 14.9352 5.72036 16.3252L6.28292 17.2197L5.53909 19.9329L8.35417 19.1947L7.50284 18.0645ZM16.6575 14.1508C16.4039 14.0238 15.1558 13.4077 14.9248 13.3236C14.6938 13.2396 14.5244 13.1975 14.3551 13.4511C14.1857 13.7047 13.7006 14.2754 13.5542 14.4445C13.4078 14.6137 13.2615 14.6347 13.0079 14.5077C12.7543 14.3807 11.9363 14.1132 10.9657 13.2464C10.1912 12.5552 9.66699 11.7258 9.52065 11.4722C9.3743 11.2186 9.50529 11.082 9.6322 10.9558C9.7461 10.8425 9.8856 10.6601 10.0125 10.5122C10.1394 10.3642 10.1818 10.2586 10.2664 10.0894C10.351 9.92023 10.3087 9.77232 10.2453 9.64541C10.1818 9.5185 9.68425 8.27092 9.46237 7.77457C9.25586 7.2941 9.04344 7.35928 8.8913 7.3508C8.75138 7.34232 8.582 7.3402 8.41267 7.3402C8.24335 7.3402 7.96825 7.40361 7.73544 7.65721C7.50262 7.91081 6.8465 8.52355 6.8465 9.77096C6.8465 11.0184 7.7566 12.2235 7.88351 12.3927C8.01041 12.5619 9.66258 15.228 12.046 16.1557C14.0204 16.9242 14.4286 16.7699 14.894 16.7275C15.3593 16.6851 16.4385 16.1354 16.6499 15.5435C16.8614 14.9515 16.8614 14.4445 16.7979 14.3389C16.7345 14.2332 16.5652 14.191 16.3115 14.064L16.6575 14.1508Z"></path>
+        </svg>
+
+        <div class="absolute inset-0 rounded-full border-4 border-[#25D366] opacity-30 group-hover:animate-ping"></div>
+    </a>
+    <div id="authModal" class="fixed inset-0 z-[100] hidden">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity" id="closeModalBg"></div>
+        
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="relative bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:max-w-md w-full border border-slate-200">
+                <div class="absolute top-4 right-4">
+                    <button id="closeModalBtn" class="text-slate-400 hover:text-slate-600">
+                        <i data-lucide="x" class="h-6 w-6"></i>
+                    </button>
+                </div>
+                
+                <div class="px-6 py-8 sm:p-10">
+                    <div class="text-center mb-8">
+                        <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-fuchsia-100 mb-4">
+                            <i data-lucide="user" class="h-6 w-6 text-fuchsia-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-900" id="modalTitle">Client Login</h3>
+                        <p class="text-sm text-slate-500 mt-2" id="modalSubtitle">Masuk ke dashboard untuk pantau proyek Anda.</p>
+                    </div>
+
+                    <form id="authForm" class="space-y-5">
+                        <div id="nameField" class="hidden">
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Nama Lengkap</label>
+                            <input type="text" id="userName" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Email</label>
+                            <input type="email" id="userEmail" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">Password</label>
+                            <input type="password" id="userPassword" required class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 focus:border-fuchsia-500 outline-none transition-all">
+                        </div>
+                        <button type="submit" id="submitBtn" class="w-full bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+                            Masuk
+                        </button>
+                    </form>
+
+                    <div class="mt-6 text-center text-sm">
+                        <span class="text-slate-500" id="togglePrompt">Belum punya akun klien?</span>
+                        <button type="button" id="toggleAuthMode" class="font-bold text-fuchsia-600 hover:text-fuchsia-500 ml-1">Daftar Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

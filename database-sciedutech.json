@@ -1,0 +1,32 @@
+{
+  "projects": {
+    "SC-7821": {
+      "clientName": "Waroeng Andya",
+      "progress": 75,
+      "estimateDate": "12 Maret 2026",
+      "paymentStatus": "DP 50% Clear",
+      "milestones": [
+        {
+          "judul": "Riset & Wireframing",
+          "status": "selesai",
+          "tgl": "15 Feb 2026"
+        },
+        {
+          "judul": "Desain UI/UX",
+          "status": "selesai",
+          "tgl": "20 Feb 2026"
+        },
+        {
+          "judul": "Development (Backend & API)",
+          "status": "proses",
+          "tgl": "Sedang Berlangsung"
+        },
+        {
+          "judul": "Testing & QA",
+          "status": "pending",
+          "tgl": "Belum Dimulai"
+        }
+      ]
+    }
+  }
+}
